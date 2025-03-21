@@ -34,7 +34,7 @@ if __name__ == '__main__':
 
     # Criar as tabelas do banco na primeira execução
     with app.app_context():
-        from models import models  # importante para registrar os models antes do create_all
+        from models import models_adega  # importante para registrar os models antes do create_all
         db.create_all()
 
     app.run(debug=True)
