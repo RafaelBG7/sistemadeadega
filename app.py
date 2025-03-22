@@ -1,11 +1,11 @@
-from flask import Flask
+from flask import Flask, render_template
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 
 db = SQLAlchemy()
 
 def create_app():
-    app = Flask(__name__)
+    app = Flask(__name__, static_folder='templates', template_folder='templates')
     
     # Configuração básica
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
@@ -26,6 +26,10 @@ def create_app():
     app.register_blueprint(produtos_bp, url_prefix='/produtos')
     app.register_blueprint(vendas_bp, url_prefix='/vendas')
     app.register_blueprint(vendedores_bp, url_prefix='/vendedores')
+
+    @app.route('/')
+    def index():
+        return render_template('index.html')
 
     return app
 
