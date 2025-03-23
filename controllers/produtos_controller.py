@@ -1,5 +1,5 @@
-from models import Produto
-from app import db
+from models.models_adega import Produto
+from models.models_adega import db
 
 def cadastrar_produto(data):
     produto = Produto(

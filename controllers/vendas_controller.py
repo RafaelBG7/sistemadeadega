@@ -1,6 +1,9 @@
-from models import Produto, Venda, Vendedor
-from app import db
+from models.models_adega import Produto, Venda, Vendedor
 from datetime import datetime
+
+from flask_sqlalchemy import SQLAlchemy
+
+db = SQLAlchemy() 
 
 def realizar_venda(data):
     produto = Produto.query.get(data['produto_id'])

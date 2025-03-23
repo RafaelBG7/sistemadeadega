@@ -1,8 +1,11 @@
+# app.py
 from flask import Flask, render_template
-from flask_sqlalchemy import SQLAlchemy
+from models import db
 from flask_cors import CORS
+from routes.produtos import produtos_bp
+from routes.vendas import vendas_bp
+from routes.vendedores import vendedores_bp
 
-db = SQLAlchemy()
 
 def create_app():
     app = Flask(__name__, static_folder='templates', template_folder='templates')
@@ -17,11 +20,6 @@ def create_app():
 
     # Inicializa o banco de dados
     db.init_app(app)
-
-    # Importando e registrando as rotas (blueprints)
-    from routes.produtos import produtos_bp
-    from routes.vendas import vendas_bp
-    from routes.vendedores import vendedores_bp
 
     app.register_blueprint(produtos_bp, url_prefix='/produtos')
     app.register_blueprint(vendas_bp, url_prefix='/vendas')
@@ -38,7 +36,7 @@ if __name__ == '__main__':
 
     # Criar as tabelas do banco na primeira execução
     with app.app_context():
-        from models import models_adega  # importante para registrar os models antes do create_all
+        from models.models_adega import Produto, Venda, Vendedor  # Importação dentro do contexto do app
         db.create_all()
 
     app.run(debug=True)

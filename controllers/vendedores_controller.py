@@ -1,5 +1,5 @@
-from models import Vendedor
-from app import db
+from models.models_adega import Vendedor
+from models import db
 
 def cadastrar_vendedor(data):
     vendedor = Vendedor(

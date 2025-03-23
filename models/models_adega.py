@@ -1,5 +1,8 @@
-from app import db
 from datetime import datetime
+from flask_sqlalchemy import SQLAlchemy
+
+db = SQLAlchemy()  # Define db localmente, sem importar de __init__.py
+
 
 class Produto(db.Model):
     __tablename__ = 'produto'
