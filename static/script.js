@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', function() {
             tabContent.classList.remove('active-tab');
         });
         document.getElementById(tabName).classList.add('active-tab');
-    }
+    };
 
     // Adicionar Categoria
     document.getElementById('category-form').addEventListener('submit', function(event) {
@@ -22,12 +22,9 @@ document.addEventListener('DOMContentLoaded', function() {
         })
         .then(response => response.json())
         .then(data => {
-            console.log('Success:', data);
-            // Atualizar a lista de categorias
+            console.log('Categoria adicionada:', data);
         })
-        .catch((error) => {
-            console.error('Error:', error);
-        });
+        .catch(error => console.error('Erro ao adicionar categoria:', error));
     });
 
     // Adicionar Marca
@@ -44,12 +41,9 @@ document.addEventListener('DOMContentLoaded', function() {
         })
         .then(response => response.json())
         .then(data => {
-            console.log('Success:', data);
-            // Atualizar a lista de marcas
+            console.log('Marca adicionada:', data);
         })
-        .catch((error) => {
-            console.error('Error:', error);
-        });
+        .catch(error => console.error('Erro ao adicionar marca:', error));
     });
 
     // Adicionar Produto
@@ -60,6 +54,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const productBrand = document.getElementById('product-brand').value;
         const purchasePrice = document.getElementById('purchase-price').value;
         const sellingPrice = document.getElementById('selling-price').value;
+        const productQuantity = document.getElementById('product-quantity').value;
 
         fetch('/produtos/cadastrar', {
             method: 'POST',
@@ -72,16 +67,39 @@ document.addEventListener('DOMContentLoaded', function() {
                 marca_id: productBrand,
                 preco_custo: purchasePrice,
                 preco_venda: sellingPrice,
+                quantidade: productQuantity,
             }),
         })
         .then(response => response.json())
         .then(data => {
-            console.log('Success:', data);
-            // Atualizar a lista de produtos
+            console.log('Produto adicionado:', data);
         })
-        .catch((error) => {
-            console.error('Error:', error);
-        });
+        .catch(error => console.error('Erro ao adicionar produto:', error));
+    });
+
+    // Realizar Venda
+    document.getElementById('sales-form').addEventListener('submit', function(event) {
+        event.preventDefault();
+        const productId = document.getElementById('sales-product-id').value;
+        const vendorId = document.getElementById('sales-vendor-id').value;
+        const quantity = document.getElementById('sales-quantity').value;
+
+        fetch('/vendas/realizar', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                produto_id: productId,
+                vendedor_id: vendorId,
+                quantidade: quantity,
+            }),
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Venda realizada:', data);
+        })
+        .catch(error => console.error('Erro ao realizar venda:', error));
     });
 
     // Adicionar Vendedor
@@ -104,11 +122,8 @@ document.addEventListener('DOMContentLoaded', function() {
         })
         .then(response => response.json())
         .then(data => {
-            console.log('Success:', data);
-            // Atualizar a lista de vendedores
+            console.log('Vendedor adicionado:', data);
         })
-        .catch((error) => {
-            console.error('Error:', error);
-        });
+        .catch(error => console.error('Erro ao adicionar vendedor:', error));
     });
 });
