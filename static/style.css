@@ -10,6 +10,39 @@ h1 {
     margin-top: 20px;
 }
 
+.tabs {
+    display: flex;
+    justify-content: center;
+    margin: 20px;
+}
+
+.tab-button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px 5px 0 0;
+    background-color: #007bff;
+    color: white;
+    cursor: pointer;
+    margin-right: 5px;
+}
+
+.tab-button:hover {
+    background-color: #0056b3;
+}
+
+.tab-content {
+    display: none;
+    padding: 20px;
+    background: #fff;
+    border-radius: 0 5px 5px 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin: 0 20px;
+}
+
+.active-tab {
+    display: block;
+}
+
 .container {
     display: flex;
     justify-content: space-around;

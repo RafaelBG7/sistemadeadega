@@ -1,4 +1,13 @@
 document.addEventListener('DOMContentLoaded', function() {
+    // Função para abrir uma aba
+    window.openTab = function(tabName) {
+        const tabContents = document.querySelectorAll('.tab-content');
+        tabContents.forEach(tabContent => {
+            tabContent.classList.remove('active-tab');
+        });
+        document.getElementById(tabName).classList.add('active-tab');
+    }
+
     // Adicionar Categoria
     document.getElementById('category-form').addEventListener('submit', function(event) {
         event.preventDefault();
@@ -69,6 +78,34 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(data => {
             console.log('Success:', data);
             // Atualizar a lista de produtos
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+        });
+    });
+
+    // Adicionar Vendedor
+    document.getElementById('vendor-form').addEventListener('submit', function(event) {
+        event.preventDefault();
+        const vendorName = document.getElementById('vendor-name').value;
+        const vendorEmail = document.getElementById('vendor-email').value;
+        const vendorPhone = document.getElementById('vendor-phone').value;
+
+        fetch('/vendedores/cadastrar', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                nome: vendorName,
+                email: vendorEmail,
+                telefone: vendorPhone,
+            }),
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Success:', data);
+            // Atualizar a lista de vendedores
         })
         .catch((error) => {
             console.error('Error:', error);

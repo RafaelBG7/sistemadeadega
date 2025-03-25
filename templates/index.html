@@ -8,38 +8,27 @@
 </head>
 <body>
     <h1>Sistema de Adega</h1>
-    <div class="container">
-        <div class="form-container">
-            <h2>Adicionar Categoria</h2>
-            <form id="category-form">
-                <input type="text" id="category-name" placeholder="Nome da Categoria" required>
-                <button type="submit">Adicionar</button>
-            </form>
-            <h2>Categorias</h2>
-            <ul id="category-list"></ul>
-        </div>
-        <div class="form-container">
-            <h2>Adicionar Marca</h2>
-            <form id="brand-form">
-                <input type="text" id="brand-name" placeholder="Nome da Marca" required>
-                <button type="submit">Adicionar</button>
-            </form>
-            <h2>Marcas</h2>
-            <ul id="brand-list"></ul>
-        </div>
-        <div class="form-container">
-            <h2>Adicionar Produto</h2>
-            <form id="product-form">
-                <input type="text" id="product-name" placeholder="Nome do Produto" required>
-                <input type="text" id="product-category" placeholder="ID da Categoria" required>
-                <input type="text" id="product-brand" placeholder="ID da Marca" required>
-                <input type="text" id="purchase-price" placeholder="Valor de Compra" required>
-                <input type="text" id="selling-price" placeholder="Valor de Venda" required>
-                <button type="submit">Adicionar</button>
-            </form>
-            <h2>Produtos</h2>
-            <ul id="product-list"></ul>
-        </div>
+    <div class="tabs">
+        <button class="tab-button" onclick="openTab('categoria')">Categoria</button>
+        <button class="tab-button" onclick="openTab('marca')">Marca</button>
+        <button class="tab-button" onclick="openTab('produto')">Produto</button>
+        <button class="tab-button" onclick="openTab('vendas')">Vendas</button>
+        <button class="tab-button" onclick="openTab('vendedor')">Vendedor</button>
+    </div>
+    <div id="categoria" class="tab-content active-tab">
+        {% include 'categoria.html' %}
+    </div>
+    <div id="marca" class="tab-content">
+        {% include 'marca.html' %}
+    </div>
+    <div id="produto" class="tab-content">
+        {% include 'produto.html' %}
+    </div>
+    <div id="vendas" class="tab-content">
+        {% include 'vendas.html' %}
+    </div>
+    <div id="vendedor" class="tab-content">
+        {% include 'vendedor.html' %}
     </div>
     <script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
