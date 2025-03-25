@@ -7,9 +7,9 @@ class Produto(db.Model):
     __tablename__ = 'produto'
 
     id = db.Column(db.Integer, primary_key=True)
-    marca = db.Column(db.String(100), nullable=False)
+    marca_id = db.Column(db.Integer, db.ForeignKey('marca.id'), nullable=False)
+    categoria_id = db.Column(db.Integer, db.ForeignKey('categoria.id'), nullable=False)
     produto = db.Column(db.String(100), nullable=False)
-    categoria = db.Column(db.String(100), nullable=False)
     preco_custo = db.Column(db.Float, nullable=False)
     preco_venda = db.Column(db.Float, nullable=False)
     quantidade = db.Column(db.Integer, default=0)
