@@ -1,8 +1,7 @@
 from datetime import datetime
 from flask_sqlalchemy import SQLAlchemy
 
-db = SQLAlchemy()  # Define db localmente, sem importar de __init__.py
-
+db = SQLAlchemy()
 
 class Produto(db.Model):
     __tablename__ = 'produto'
@@ -18,7 +17,6 @@ class Produto(db.Model):
     # Relação com vendas
     vendas = db.relationship('Venda', backref='produto', lazy=True)
 
-
 class Vendedor(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     nome = db.Column(db.String(80), nullable=False)
@@ -28,7 +26,6 @@ class Vendedor(db.Model):
 
     # Relação com vendas
     vendas = db.relationship('Venda', backref='vendedor', lazy=True)
-
 
 class Venda(db.Model):
     __tablename__ = 'venda'
@@ -40,3 +37,21 @@ class Venda(db.Model):
     data = db.Column(db.DateTime, default=datetime.utcnow)
     total_venda = db.Column(db.Float, nullable=False)
     lucro = db.Column(db.Float, nullable=False)
+
+class Categoria(db.Model):
+    __tablename__ = 'categoria'
+
+    id = db.Column(db.Integer, primary_key=True)
+    nome = db.Column(db.String(100), nullable=False)
+
+    # Relação com produtos
+    produtos = db.relationship('Produto', backref='categoria', lazy=True)
+
+class Marca(db.Model):
+    __tablename__ = 'marca'
+
+    id = db.Column(db.Integer, primary_key=True)
+    nome = db.Column(db.String(100), nullable=False)
+
+    # Relação com produtos
+    produtos = db.relationship('Produto', backref='marca', lazy=True)

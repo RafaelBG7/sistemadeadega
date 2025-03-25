@@ -1,14 +1,14 @@
-# app.py
 from flask import Flask, render_template
-from models import db
+from models.models_adega import db, Produto, Venda, Vendedor, Categoria, Marca
 from flask_cors import CORS
 from routes.produtos import produtos_bp
 from routes.vendas import vendas_bp
 from routes.vendedores import vendedores_bp
-
+from routes.categorias import categorias_bp
+from routes.marcas import marcas_bp
 
 def create_app():
-    app = Flask(__name__, static_folder='templates', template_folder='templates')
+    app = Flask(__name__, static_folder='static', template_folder='templates')
     
     # Configuração básica
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
@@ -21,9 +21,12 @@ def create_app():
     # Inicializa o banco de dados
     db.init_app(app)
 
+    # Registrar blueprints
     app.register_blueprint(produtos_bp, url_prefix='/produtos')
     app.register_blueprint(vendas_bp, url_prefix='/vendas')
     app.register_blueprint(vendedores_bp, url_prefix='/vendedores')
+    app.register_blueprint(categorias_bp, url_prefix='/categorias')
+    app.register_blueprint(marcas_bp, url_prefix='/marcas')
 
     @app.route('/')
     def index():
@@ -36,7 +39,6 @@ if __name__ == '__main__':
 
     # Criar as tabelas do banco na primeira execução
     with app.app_context():
-        from models.models_adega import Produto, Venda, Vendedor  # Importação dentro do contexto do app
         db.create_all()
 
     app.run(debug=True)
