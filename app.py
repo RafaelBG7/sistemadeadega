@@ -29,9 +29,30 @@ def create_app():
     app.register_blueprint(categorias_bp, url_prefix='/categorias')
     app.register_blueprint(marcas_bp, url_prefix='/marcas')
 
+    # Rotas para renderizar páginas HTML
     @app.route('/')
     def index():
         return render_template('index.html')
+
+    @app.route('/categorias')
+    def categorias_page():
+        return render_template('categoria.html', active_tab='categoria')
+
+    @app.route('/marcas')
+    def marcas_page():
+        return render_template('marca.html', active_tab='marca')
+
+    @app.route('/produtos')
+    def produtos_page():
+        return render_template('produto.html', active_tab='produto')
+
+    @app.route('/vendas')
+    def vendas_page():
+        return render_template('index.html', active_tab='vendas')
+
+    @app.route('/vendedores')
+    def vendedores_page():
+        return render_template('vendedores.html', active_tab='vendedor')
 
     return app
 
