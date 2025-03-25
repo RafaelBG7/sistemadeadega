@@ -1,6 +1,7 @@
 from flask import Flask, render_template
-from models.models_adega import db, Produto, Venda, Vendedor, Categoria, Marca
 from flask_cors import CORS
+from models import db  # Importar db do __init__.py
+from models.models_adega import Produto, Venda, Vendedor, Categoria, Marca
 from routes.produtos import produtos_bp
 from routes.vendas import vendas_bp
 from routes.vendedores import vendedores_bp

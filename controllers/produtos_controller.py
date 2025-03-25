@@ -1,11 +1,10 @@
-from models.models_adega import Produto
-from models.models_adega import db
+from models.models_adega import Produto, db
 
 def cadastrar_produto(data):
     produto = Produto(
-        marca=data['marca'],
+        marca_id=data['marca_id'],
         produto=data['produto'],
-        categoria=data['categoria'],
+        categoria_id=data['categoria_id'],
         preco_custo=data['preco_custo'],
         preco_venda=data['preco_venda'],
         quantidade=data.get('quantidade', 0)
@@ -19,9 +18,9 @@ def listar_produtos():
     return [
         {
             'id': p.id,
-            'marca': p.marca,
+            'marca_id': p.marca_id,
             'produto': p.produto,
-            'categoria': p.categoria,
+            'categoria_id': p.categoria_id,
             'preco_custo': p.preco_custo,
             'preco_venda': p.preco_venda,
             'quantidade': p.quantidade

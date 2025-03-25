@@ -1,4 +1,48 @@
 document.addEventListener('DOMContentLoaded', function() {
+    // Adicionar Categoria
+    document.getElementById('category-form').addEventListener('submit', function(event) {
+        event.preventDefault();
+        const categoryName = document.getElementById('category-name').value;
+
+        fetch('/categorias/cadastrar', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ nome: categoryName }),
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Success:', data);
+            // Atualizar a lista de categorias
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+        });
+    });
+
+    // Adicionar Marca
+    document.getElementById('brand-form').addEventListener('submit', function(event) {
+        event.preventDefault();
+        const brandName = document.getElementById('brand-name').value;
+
+        fetch('/marcas/cadastrar', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ nome: brandName }),
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Success:', data);
+            // Atualizar a lista de marcas
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+        });
+    });
+
     // Adicionar Produto
     document.getElementById('product-form').addEventListener('submit', function(event) {
         event.preventDefault();
