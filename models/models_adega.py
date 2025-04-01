@@ -5,7 +5,6 @@ class Produto(db.Model):
     __tablename__ = 'produto'
 
     id = db.Column(db.Integer, primary_key=True)
-    marca_id = db.Column(db.Integer, db.ForeignKey('marca.id'), nullable=False)
     categoria_id = db.Column(db.Integer, db.ForeignKey('categoria.id'), nullable=False)
     produto = db.Column(db.String(100), nullable=False)
     preco_custo = db.Column(db.Float, nullable=False)
@@ -47,12 +46,3 @@ class Categoria(db.Model):
 
     # Relação com produtos
     produtos = db.relationship('Produto', backref='categoria', lazy=True)
-
-class Marca(db.Model):
-    __tablename__ = 'marca'
-
-    id = db.Column(db.Integer, primary_key=True)
-    nome = db.Column(db.String(100), nullable=False)
-
-    # Relação com produtos
-    produtos = db.relationship('Produto', backref='marca', lazy=True)

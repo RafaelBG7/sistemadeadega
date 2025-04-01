@@ -6,8 +6,11 @@ produtos_bp = Blueprint('produtos', __name__)
 @produtos_bp.route('/cadastrar', methods=['POST'])
 def cadastrar():
     data = request.json
-    result = cadastrar_produto(data)
-    return jsonify(result)
+    if not data:
+        return jsonify({'message': 'Dados não fornecidos!'}), 400
+
+    result, status_code = cadastrar_produto(data)
+    return jsonify(result), status_code
 
 @produtos_bp.route('/listar', methods=['GET'])
 def listar():

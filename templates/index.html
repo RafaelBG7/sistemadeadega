@@ -8,27 +8,71 @@
 </head>
 <body>
     <h1>Sistema de Adega</h1>
-    <div class="tabs">
-        <button class="tab-button" onclick="openTab('categoria')">Categoria</button>
-        <button class="tab-button" onclick="openTab('marca')">Marca</button>
-        <button class="tab-button" onclick="openTab('produto')">Produto</button>
-        <button class="tab-button" onclick="openTab('vendas')">Vendas</button>
-        <button class="tab-button" onclick="openTab('vendedor')">Vendedor</button>
-    </div>
-    <div id="categoria" class="tab-content active-tab">
-        {% include 'categoria.html' %}
-    </div>
-    <div id="marca" class="tab-content">
-        {% include 'marca.html' %}
-    </div>
-    <div id="produto" class="tab-content">
-        {% include 'produto.html' %}
-    </div>
-    <div id="vendas" class="tab-content">
-        {% include 'vendas.html' %}
-    </div>
-    <div id="vendedor" class="tab-content">
-        {% include 'vendedor.html' %}
+    <div class="container">
+        <!-- Categoria -->
+        <div class="form-container">
+            <h2>Adicionar Categoria</h2>
+            <form id="category-form">
+                <input type="text" id="category-name" placeholder="Nome da Categoria" required>
+                <button type="submit">Adicionar</button>
+            </form>
+            <h2>Categorias</h2>
+            <ul id="category-list"></ul>
+        </div>
+
+
+        <!-- Produto -->
+        <div class="form-container">
+            <h2>Adicionar Produto</h2>
+            <form id="product-form">
+                <input type="text" id="product-name" placeholder="Nome do Produto" required>
+                <input type="text" id="product-category" placeholder="ID da Categoria" required>
+                <input type="text" id="purchase-price" placeholder="Valor de Compra" required>
+                <input type="text" id="selling-price" placeholder="Valor de Venda" required>
+                <input type="number" id="product-quantity" placeholder="Quantidade" required>
+                <button type="submit">Adicionar</button>
+            </form>
+            <h2>Produtos</h2>
+            <ul id="product-list"></ul>
+        </div>
+
+        <!-- Vendas -->
+        <div class="form-container">
+            <h2>Realizar Venda</h2>
+            <form id="sales-form">
+                <div id="products-container">
+                    <div class="product-item">
+                        <input type="text" class="product-id" placeholder="ID do Produto" required>
+                        <input type="number" class="product-quantity" placeholder="Quantidade" required>
+                    </div>
+                </div>
+                <button type="button" id="add-product">Adicionar Produto</button>
+                <select id="payment-method" required>
+                    <option value="">Selecione a Forma de Pagamento</option>
+                    <option value="Dinheiro">Dinheiro</option>
+                    <option value="Pix">Pix</option>
+                    <option value="Débito">Débito</option>
+                    <option value="Crédito">Crédito</option>
+                </select>
+                <input type="text" id="sales-vendor-id" placeholder="ID do Vendedor" required>
+                <button type="submit">Realizar Venda</button>
+            </form>
+            <h2>Relatório de Vendas</h2>
+            <ul id="sales-report"></ul>
+        </div>
+
+        <!-- Vendedor -->
+        <div class="form-container">
+            <h2>Adicionar Vendedor</h2>
+            <form id="vendor-form">
+                <input type="text" id="vendor-name" placeholder="Nome do Vendedor" required>
+                <input type="email" id="vendor-email" placeholder="Email do Vendedor" required>
+                <input type="text" id="vendor-phone" placeholder="Telefone do Vendedor">
+                <button type="submit">Adicionar</button>
+            </form>
+            <h2>Vendedores</h2>
+            <ul id="vendor-list"></ul>
+        </div>
     </div>
     <script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>

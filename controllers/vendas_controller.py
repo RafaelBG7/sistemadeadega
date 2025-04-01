@@ -3,6 +3,7 @@ from datetime import datetime
 from models import db
 
 def realizar_venda(data):
+    print("Dados recebidos para venda:", data)  # Log para depuração
     produtos = data['produtos']
     vendedor = Vendedor.query.get(data['vendedor_id'])
     forma_pagamento = data['forma_pagamento']
@@ -37,6 +38,7 @@ def realizar_venda(data):
         db.session.add(venda)
 
     db.session.commit()
+    print("Vendas realizadas com sucesso:", vendas)  # Log para depuração
     return {'message': 'Venda realizada com sucesso!'}
 
 def relatorio():
@@ -58,6 +60,7 @@ def relatorio():
     total = sum(v['total_venda'] for v in relatorio)
     lucro_total = sum(v['lucro'] for v in relatorio)
     
+    print("Relatório gerado:", relatorio)  # Log para depuração
     return {
         'total_vendas': total,
         'lucro_total': lucro_total,

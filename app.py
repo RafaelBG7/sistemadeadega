@@ -1,12 +1,11 @@
 from flask import Flask, render_template
 from flask_cors import CORS
-from models import db  # Importar db do __init__.py
-from models.models_adega import Produto, Venda, Vendedor, Categoria, Marca
+from models import db
+from models.models_adega import Produto, Venda, Vendedor, Categoria  # Removido Marca
 from routes.produtos import produtos_bp
 from routes.vendas import vendas_bp
 from routes.vendedores import vendedores_bp
 from routes.categorias import categorias_bp
-from routes.marcas import marcas_bp
 
 def create_app():
     app = Flask(__name__, static_folder='static', template_folder='templates')
@@ -16,7 +15,7 @@ def create_app():
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     app.config['SECRET_KEY'] = 'sua_chave_secreta_aqui'
     
-    # Habilitar CORS (para integrar com frontend futuramente)
+    # Habilitar CORS
     CORS(app)
 
     # Inicializa o banco de dados
@@ -27,32 +26,11 @@ def create_app():
     app.register_blueprint(vendas_bp, url_prefix='/vendas')
     app.register_blueprint(vendedores_bp, url_prefix='/vendedores')
     app.register_blueprint(categorias_bp, url_prefix='/categorias')
-    app.register_blueprint(marcas_bp, url_prefix='/marcas')
 
-    # Rotas para renderizar páginas HTML
+    # Rota principal
     @app.route('/')
     def index():
         return render_template('index.html')
-
-    @app.route('/categorias')
-    def categorias_page():
-        return render_template('categoria.html', active_tab='categoria')
-
-    @app.route('/marcas')
-    def marcas_page():
-        return render_template('marca.html', active_tab='marca')
-
-    @app.route('/produtos')
-    def produtos_page():
-        return render_template('produto.html', active_tab='produto')
-
-    @app.route('/vendas')
-    def vendas_page():
-        return render_template('index.html', active_tab='vendas')
-
-    @app.route('/vendedores')
-    def vendedores_page():
-        return render_template('vendedores.html', active_tab='vendedor')
 
     return app
 
