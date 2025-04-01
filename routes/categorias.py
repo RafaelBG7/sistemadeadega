@@ -16,3 +16,13 @@ def listar_categorias():
     categorias = Categoria.query.all()
     categorias_list = [{'id': c.id, 'nome': c.nome} for c in categorias]
     return jsonify(categorias_list)
+
+@categorias_bp.route('/buscar', methods=['GET'])
+def buscar_por_nome():
+    nome = request.args.get('nome', '')
+    if not nome:
+        return jsonify([]), 200
+
+    categorias = Categoria.query.filter(Categoria.nome.ilike(f'%{nome}%')).all()
+    categorias_list = [{'id': c.id, 'nome': c.nome} for c in categorias]
+    return jsonify(categorias_list), 200

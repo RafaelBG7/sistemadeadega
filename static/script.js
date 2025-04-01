@@ -108,15 +108,65 @@ document.addEventListener('DOMContentLoaded', function () {
     // Inicializar listagem de categorias
     listarCategorias();
 
+    // Função para buscar categorias pelo nome
+    function buscarCategoriasPorNome(inputElement) {
+        const query = inputElement.value;
+        if (query.length < 2) return; // Buscar apenas se houver pelo menos 2 caracteres
+
+        fetch(`/categorias/buscar?nome=${encodeURIComponent(query)}`)
+            .then(response => response.json())
+            .then(data => {
+                const datalistId = `datalist-categorias`;
+                let datalist = document.getElementById(datalistId);
+
+                if (!datalist) {
+                    datalist = document.createElement('datalist');
+                    datalist.id = datalistId;
+                    document.body.appendChild(datalist);
+                }
+
+                datalist.innerHTML = '';
+                data.forEach(categoria => {
+                    const option = document.createElement('option');
+                    option.value = categoria.nome;
+                    option.dataset.id = categoria.id;
+                    datalist.appendChild(option);
+                });
+
+                inputElement.setAttribute('list', datalistId);
+
+                // Atualizar o campo oculto com o ID da categoria selecionada
+                inputElement.addEventListener('change', function () {
+                    const selectedOption = Array.from(datalist.options).find(
+                        option => option.value === inputElement.value
+                    );
+                    const categoryIdInput = document.getElementById('product-category-id');
+                    categoryIdInput.value = selectedOption ? selectedOption.dataset.id : '';
+                });
+            })
+            .catch(error => console.error('Erro ao buscar categorias:', error));
+    }
+
+    // Adicionar funcionalidade de autocompletar no campo de categoria
+    const categoryInput = document.getElementById('product-category');
+    categoryInput.addEventListener('input', function () {
+        buscarCategoriasPorNome(categoryInput);
+    });
+
     // Adicionar Produto
     document.getElementById('product-form').addEventListener('submit', function (event) {
         event.preventDefault();
 
         const productName = document.getElementById('product-name').value;
-        const categoryId = document.getElementById('product-category').value;
+        const categoryId = document.getElementById('product-category-id').value; // ID da categoria selecionada
         const purchasePrice = parseFloat(document.getElementById('purchase-price').value);
         const sellingPrice = parseFloat(document.getElementById('selling-price').value);
         const quantity = parseInt(document.getElementById('product-quantity').value, 10);
+
+        if (!categoryId) {
+            alert('Por favor, selecione uma categoria válida!');
+            return;
+        }
 
         fetch('/produtos/cadastrar', {
             method: 'POST',
