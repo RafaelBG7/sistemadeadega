@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const productItem = document.createElement('div');
         productItem.classList.add('product-item');
         productItem.innerHTML = `
-            <input type="text" class="product-id" placeholder="ID do Produto" required>
+            <input type="text" class="product-name" placeholder="Nome do Produto" required>
             <input type="number" class="product-quantity" placeholder="Quantidade" required>
             <button type="button" class="remove-product">Remover</button>
         `;
@@ -23,9 +23,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
         const products = [];
         document.querySelectorAll('.product-item').forEach(item => {
-            const productId = item.querySelector('.product-id').value;
+            const productName = item.querySelector('.product-name').value;
             const quantity = parseInt(item.querySelector('.product-quantity').value, 10);
-            products.push({ produto_id: productId, quantidade: quantity });
+            products.push({ produto_nome: productName, quantidade: quantity });
         });
 
         const paymentMethod = document.getElementById('payment-method').value;

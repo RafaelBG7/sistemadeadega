@@ -17,3 +17,13 @@ def cadastrar():
 def listar():
     result = listar_produtos()
     return jsonify(result)
+
+@produtos_bp.route('/buscar', methods=['GET'])
+def buscar_por_nome():
+    nome = request.args.get('nome', '')
+    if not nome:
+        return jsonify([]), 200
+
+    produtos = Produto.query.filter(Produto.produto.ilike(f'%{nome}%')).all()
+    produtos_list = [{'id': p.id, 'nome': p.produto} for p in produtos]
+    return jsonify(produtos_list), 200
