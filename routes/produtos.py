@@ -9,6 +9,7 @@ def cadastrar():
     if not data:
         return jsonify({'message': 'Dados não fornecidos!'}), 400
 
+    # Chamar a função do controlador e desempacotar os valores retornados
     result, status_code = cadastrar_produto(data)
     return jsonify(result), status_code
 
