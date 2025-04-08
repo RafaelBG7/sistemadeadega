@@ -282,6 +282,11 @@ document.addEventListener('DOMContentLoaded', function () {
             .catch(error => console.error('Erro ao atualizar dados do caixa:', error));
     }
 
+    // Adicionar evento ao botão de atualizar caixa
+    document.getElementById('refresh-cash-register').addEventListener('click', function () {
+        atualizarCaixa();
+    });
+
     // Função para atualizar o status do caixa
     function atualizarStatusCaixa() {
         fetch('/caixa/status')
