@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Adega</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h1>Sistema de Adega</h1>
+    <div class="container">
+        <!-- Categoria -->
+        <div class="form-container">
+            <h2>Adicionar Categoria</h2>
+            <form id="category-form">
+                <input type="text" id="category-name" placeholder="Nome da Categoria" required>
+                <button type="submit">Adicionar</button>
+            </form>
+            <h2>Categorias</h2>
+            <ul id="category-list"></ul>
+        </div>
+
+
+        <!-- Produto -->
+        <div class="form-container">
+            <h2>Adicionar Produto</h2>
+            <form id="product-form">
+                <input type="text" id="product-name" placeholder="Nome do Produto" required>
+                <input type="text" id="product-category" placeholder="Nome da Categoria" required>
+                <input type="hidden" id="product-category-id">
+                <input type="text" id="purchase-price" placeholder="Valor de Compra" required>
+                <input type="text" id="selling-price" placeholder="Valor de Venda" required>
+                <input type="number" id="product-quantity" placeholder="Quantidade" required>
+                <button type="submit">Adicionar</button>
+            </form>
+            <h2>Produtos</h2>
+            <ul id="product-list"></ul>
+        </div>
+
+        <!-- Vendas -->
+        <div class="form-container">
+            <h2>Realizar Venda</h2>
+            <form id="sales-form">
+                <div id="products-container">
+                    <div class="product-item">
+                        <input type="text" class="product-name" placeholder="Nome do Produto" required>
+                        <input type="number" class="product-quantity" placeholder="Quantidade" required>
+                    </div>
+                </div>
+                <button type="button" id="add-product">Adicionar Produto</button>
+                <select id="payment-method" required>
+                    <option value="">Selecione a Forma de Pagamento</option>
+                    <option value="Dinheiro">Dinheiro</option>
+                    <option value="Pix">Pix</option>
+                    <option value="Débito">Débito</option>
+                    <option value="Crédito">Crédito</option>
+                </select>
+                <input type="text" id="sales-vendor-id" placeholder="ID do Vendedor" required>
+                <button type="submit">Realizar Venda</button>
+            </form>
+            <h2>Relatório de Vendas</h2>
+            <ul id="sales-report"></ul>
+        </div>
+
+        <!-- Vendas Diárias -->
+        <div class="form-container">
+            <h2>Vendas Diárias</h2>
+            <button id="daily-sales-refresh">Atualizar</button>
+            <ul id="daily-sales-summary">
+                <li><strong>Total de Vendas:</strong> R$<span id="daily-total-sales">0.00</span></li>
+                <li><strong>Lucro Total:</strong> R$<span id="daily-total-profit">0.00</span></li>
+                <li><strong>Formas de Pagamento:</strong></li>
+                <ul id="daily-payment-methods"></ul>
+            </ul>
+        </div>
+
+        <!-- Controle de Caixa -->
+        <div class="form-container">
+            <h2>Controle de Caixa</h2>
+            <button id="open-cash-register">Abrir Caixa</button>
+            <button id="close-cash-register" disabled>Fechar Caixa</button>
+            <div id="cash-register-status">
+                <p><strong>Status do Caixa:</strong> <span id="cash-register-state">Fechado</span></p>
+            </div>
+            <h3>Total Vendido no Dia</h3>
+            <p>R$ <span id="total-sold-today">0.00</span></p>
+            <h3>Lucro Diário</h3>
+            <p>R$ <span id="daily-profit">0.00</span></p>
+        </div>
+
+        <!-- Vendedor -->
+        <div class="form-container">
+            <h2>Adicionar Vendedor</h2>
+            <form id="vendor-form">
+                <input type="text" id="vendor-name" placeholder="Nome do Vendedor" required>
+                <input type="email" id="vendor-email" placeholder="Email do Vendedor" required>
+                <input type="text" id="vendor-phone" placeholder="Telefone do Vendedor">
+                <button type="submit">Adicionar</button>
+            </form>
+            <h2>Vendedores</h2>
+            <ul id="vendor-list"></ul>
+        </div>
+    </div>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
