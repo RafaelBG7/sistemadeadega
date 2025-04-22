@@ -140,3 +140,89 @@ def status_caixa():
             'id': caixa_aberto.id
         }
     return {'status': 'Fechado'}
+
+def relatorio_por_periodo(inicio, fim):
+    try:
+        # Converter as datas de string para datetime
+        inicio_date = datetime.strptime(inicio, '%Y-%m-%d')
+        fim_date = datetime.strptime(fim, '%Y-%m-%d')
+
+        # Ajustar o fim_date para incluir o final do dia
+        fim_date = fim_date.replace(hour=23, minute=59, second=59)
+
+        # Filtrar vendas no intervalo de datas
+        vendas = Venda.query.filter(Venda.data >= inicio_date, Venda.data <= fim_date).all()
+
+        # Calcular total de vendas e lucro
+        total_vendas = sum(v.total_venda for v in vendas)
+        lucro_total = sum(v.lucro for v in vendas)
+
+        # Criar o relatório detalhado
+        relatorio = [
+            {
+                'id': v.id,
+                'produto': v.produto.produto,
+                'vendedor': v.vendedor.nome,
+                'quantidade': v.quantidade,
+                'data': v.data.strftime('%d/%m/%Y %H:%M'),
+                'total_venda': v.total_venda,
+                'lucro': v.lucro,
+                'forma_pagamento': v.forma_pagamento
+            }
+            for v in vendas
+        ]
+
+        return {
+            'total_vendas': total_vendas,
+            'lucro_total': lucro_total,
+            'vendas': relatorio
+        }
+    except Exception as e:
+        return {'error': str(e)}
+
+def relatorio_por_vendedor(vendedor_id):
+    try:
+        vendas = Venda.query.filter_by(vendedor_id=vendedor_id).all()
+        total_vendas = sum(v.total_venda for v in vendas)
+        lucro_total = sum(v.lucro for v in vendas)
+
+        relatorio = [
+            {
+                'id': v.id,
+                'produto': v.produto.produto,
+                'quantidade': v.quantidade,
+                'data': v.data.strftime('%d/%m/%Y %H:%M'),
+                'total_venda': v.total_venda,
+                'lucro': v.lucro,
+                'forma_pagamento': v.forma_pagamento
+            }
+            for v in vendas
+        ]
+
+        return {
+            'total_vendas': total_vendas,
+            'lucro_total': lucro_total,
+            'vendas': relatorio
+        }
+    except Exception as e:
+        return {'error': str(e)}
+
+def relatorio_por_produto():
+    try:
+        produtos = Produto.query.all()
+        relatorio = []
+
+        for produto in produtos:
+            vendas = Venda.query.filter_by(produto_id=produto.id).all()
+            total_vendas = sum(v.total_venda for v in vendas)
+            lucro_total = sum(v.lucro for v in vendas)
+
+            relatorio.append({
+                'produto': produto.produto,
+                'total_vendas': total_vendas,
+                'lucro_total': lucro_total
+            })
+
+        return relatorio
+    except Exception as e:
+        return {'error': str(e)}

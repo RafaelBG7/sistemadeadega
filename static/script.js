@@ -352,5 +352,53 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Inicializar o status do caixa ao carregar a página
     atualizarStatusCaixa();
-});
 
+    // Relatório por Período
+    document.getElementById('gerar-relatorio-periodo').addEventListener('click', function () {
+        const inicio = document.getElementById('inicio').value;
+        const fim = document.getElementById('fim').value;
+
+        fetch(`/relatorios/periodo?inicio=${inicio}&fim=${fim}`)
+            .then(response => response.json())
+            .then(data => {
+                const resultado = document.getElementById('resultado-periodo');
+                resultado.innerHTML = `
+                    <p>Total de Vendas: R$ ${data.total_vendas.toFixed(2)}</p>
+                    <p>Lucro Total: R$ ${data.lucro_total.toFixed(2)}</p>
+                `;
+            })
+            .catch(error => console.error('Erro ao gerar relatório por período:', error));
+    });
+
+    // Relatório por Vendedor
+    document.getElementById('gerar-relatorio-vendedor').addEventListener('click', function () {
+        const vendedorId = document.getElementById('vendedor-id').value;
+
+        fetch(`/relatorios/vendedor?vendedor_id=${vendedorId}`)
+            .then(response => response.json())
+            .then(data => {
+                const resultado = document.getElementById('resultado-vendedor');
+                resultado.innerHTML = `
+                    <p>Total de Vendas: R$ ${data.total_vendas.toFixed(2)}</p>
+                    <p>Lucro Total: R$ ${data.lucro_total.toFixed(2)}</p>
+                `;
+            })
+            .catch(error => console.error('Erro ao gerar relatório por vendedor:', error));
+    });
+
+    // Relatório por Produto
+    document.getElementById('gerar-relatorio-produto').addEventListener('click', function () {
+        fetch('/relatorios/produto')
+            .then(response => response.json())
+            .then(data => {
+                const resultado = document.getElementById('resultado-produto');
+                resultado.innerHTML = data.map(produto => `
+                    <p>Produto: ${produto.produto}</p>
+                    <p>Total de Vendas: R$ ${produto.total_vendas.toFixed(2)}</p>
+                    <p>Lucro Total: R$ ${produto.lucro_total.toFixed(2)}</p>
+                    <hr>
+                `).join('');
+            })
+            .catch(error => console.error('Erro ao gerar relatório por produto:', error));
+    });
+});

@@ -36,7 +36,19 @@ class Venda(db.Model):
     data = db.Column(db.DateTime, default=datetime.utcnow)
     total_venda = db.Column(db.Float, nullable=False)
     lucro = db.Column(db.Float, nullable=False)
-    forma_pagamento = db.Column(db.String(20), nullable=False)  # Novo campo para forma de pagamento
+    forma_pagamento = db.Column(db.String(20), nullable=False)
+
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'produto': self.produto.produto,
+            'vendedor': self.vendedor.nome,
+            'quantidade': self.quantidade,
+            'data': self.data.strftime('%d/%m/%Y %H:%M'),
+            'total_venda': self.total_venda,
+            'lucro': self.lucro,
+            'forma_pagamento': self.forma_pagamento
+        }
 
 class Categoria(db.Model):
     __tablename__ = 'categoria'
