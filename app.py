@@ -33,9 +33,33 @@ def create_app():
     app.register_blueprint(caixa_bp, url_prefix='/caixa')
     app.register_blueprint(relatorios_bp, url_prefix='/relatorios')
 
-    @app.route('/index')
-    def index():
-        return render_template('index.html')
+    @app.route('/categoria')
+    def categoria():
+        return render_template('categoria.html')
+
+    @app.route('/produto')
+    def produto():
+        return render_template('produto.html')
+
+    @app.route('/venda')
+    def venda():
+        return render_template('venda.html')
+
+    @app.route('/vendas-diarias')
+    def vendas_diarias():
+        return render_template('vendas_diarias.html')
+
+    @app.route('/caixa')
+    def caixa():
+        return render_template('caixa.html')
+
+    @app.route('/vendedor')
+    def vendedor():
+        return render_template('vendedor.html')
+    
+    @app.route('/relatorios')
+    def relatorios():
+        return render_template('relatorios.html')
 
 
     return app

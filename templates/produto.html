@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Produto - Adega</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <h1><a href="/" class="home-link">Sistema de Adega</a></h1>
+
+  <div class="pagina-produtos">
+    <div class="form-container">
+      <h2>Adicionar Produto</h2>
+      <form id="product-form">
+        <input type="text" id="product-name" placeholder="Nome do Produto" required>
+        <input type="text" id="product-category" placeholder="Nome da Categoria" required>
+        <input type="hidden" id="product-category-id">
+        <input type="text" id="purchase-price" placeholder="Valor de Compra" required>
+        <input type="text" id="selling-price" placeholder="Valor de Venda" required>
+        <input type="number" id="product-quantity" placeholder="Quantidade" required>
+        <button type="submit">Adicionar</button>
+      </form>
+
+      <h2>Produtos</h2>
+      <ul id="product-list"></ul>
+    </div>
+  </div>
+
+  <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+
+</html>

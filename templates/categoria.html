@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Categoria - Adega</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <h1><a href="/" class="home-link">Sistema de Adega</a></h1>
+
+  <div class="pagina-categorias">
+    <div class="form-container">
+      <h2>Adicionar Categoria</h2>
+      <form id="category-form">
+        <input type="text" id="category-name" placeholder="Nome da Categoria" required>
+        <button type="submit">Adicionar</button>
+      </form>
+
+      <h2>Categorias</h2>
+      <ul id="category-list"></ul>
+    </div>
+  </div>
+
+  <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+
+</html>
