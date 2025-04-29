@@ -8,7 +8,7 @@
     body {
       margin: 0;
       padding: 0;
-      background-color: #cfcbcb; /* fundo cinza claro */
+      background-color: #f0f0f0; /* fundo cinza claro */
       font-family: Arial, sans-serif;
       height: 100vh;
       display: flex;
@@ -17,7 +17,7 @@
     }
 
     .modal {
-      background-color: #dad2d2;
+      background-color: #fff;
       padding: 30px 40px;
       border-radius: 12px;
       box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
@@ -31,44 +31,28 @@
       color: #333;
     }
 
-    .nav-button {
+    .btn-ir-para-index {
       padding: 12px 24px;
       font-size: 16px;
       border: none;
       border-radius: 8px;
-      background-color: #007bff; /* Azul */
+      background-color: #8b0000; /* vinho */
       color: white;
       cursor: pointer;
       transition: background-color 0.3s ease;
       text-decoration: none;
       display: inline-block;
-      margin-top: 10px;
     }
 
-    .nav-button:hover {
-      background-color: #0056b3; /* Azul escuro */
-    }
-
-    .nav-links {
-      margin-top: 20px;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
+    .btn-ir-para-index:hover {
+      background-color: #a40000;
     }
   </style>
 </head>
 <body>
   <div class="modal">
     <h1>Adega dos D</h1>
-    <div class="nav-links">
-      <a href="/categoria" class="nav-button">Categorias</a>
-      <a href="/produto" class="nav-button">Produtos</a>
-      <a href="/venda" class="nav-button">Vendas</a>
-      <a href="/vendas-diarias" class="nav-button">Vendas Diárias</a>
-      <a href="/caixa" class="nav-button">Controle de Caixa</a>
-      <a href="/vendedor" class="nav-button">Vendedores</a>
-      <a href="/relatorios" class="nav-button">Relatorios</a>
-    </div>
+    <a href="/index" class="btn-ir-para-index">Entrar no Sistema</a>
   </div>
 </body>
 </html>

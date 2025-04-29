@@ -44,7 +44,7 @@ def realizar_venda(data):
                 quantidade=quantidade,
                 total_venda=total_venda,
                 lucro=lucro,
-                data=datetime.utcnow(),
+                data=datetime.utcnow(),  # Aqui a data está sendo definida
                 forma_pagamento=forma_pagamento
             )
             vendas.append(venda)
@@ -143,6 +143,9 @@ def status_caixa():
 
 def relatorio_por_periodo(inicio, fim):
     try:
+        # Log para depuração
+        print(f"Gerando relatório para o período: {inicio} a {fim}")
+
         # Converter as datas de string para datetime
         inicio_date = datetime.strptime(inicio, '%Y-%m-%d')
         fim_date = datetime.strptime(fim, '%Y-%m-%d')
@@ -150,8 +153,14 @@ def relatorio_por_periodo(inicio, fim):
         # Ajustar o fim_date para incluir o final do dia
         fim_date = fim_date.replace(hour=23, minute=59, second=59)
 
+        # Log para depuração
+        print(f"Datas convertidas: início={inicio_date}, fim={fim_date}")
+
         # Filtrar vendas no intervalo de datas
         vendas = Venda.query.filter(Venda.data >= inicio_date, Venda.data <= fim_date).all()
+
+        # Log para depuração
+        print(f"Vendas encontradas: {len(vendas)}")
 
         # Calcular total de vendas e lucro
         total_vendas = sum(v.total_venda for v in vendas)
@@ -177,7 +186,11 @@ def relatorio_por_periodo(inicio, fim):
             'lucro_total': lucro_total,
             'vendas': relatorio
         }
+    except ValueError as ve:
+        print(f"Erro de conversão de datas: {ve}")
+        return {'error': 'Formato de data inválido. Use o formato YYYY-MM-DD.'}
     except Exception as e:
+        print(f"Erro ao gerar relatório: {e}")
         return {'error': str(e)}
 
 def relatorio_por_vendedor(vendedor_id):

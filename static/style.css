@@ -1,26 +1,15 @@
+/* Estilo geral */
 body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  background-color: #f4f4f4;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  min-height: 100vh;
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
 }
 
-/* Garante que o conteúdo fique centralizado abaixo do título */
-.pagina-produto, .pagina-categoria, .pagina-vendedor, .pagina-relatorio,
-.pagina-venda, .pagina-vendas-diarias, .pagina-caixa {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-h1 {
+h1, h2 {
     text-align: center;
-    margin-top: 20px;
     color: #333;
+    margin-top: 20px;
 }
 
 .container {
@@ -31,18 +20,12 @@ h1 {
 }
 
 .form-container {
-  background: #fff;
-  padding: 20px;
-  margin-top: 20px;
-  border-radius: 8px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-  max-width: 400px;
-  width: 90%;
-}
-
-h2 {
-    color: #007bff;
-    margin-bottom: 10px;
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    width: 80%;
+    margin-bottom: 20px;
 }
 
 form {
@@ -62,14 +45,15 @@ button {
     padding: 10px;
     border: none;
     border-radius: 5px;
-    background-color: #007bff; /* Azul */
+    background-color: #8b0000; /* Vinho */
     color: white;
     cursor: pointer;
     font-size: 16px;
+    transition: background-color 0.3s ease;
 }
 
 button:hover {
-    background-color: #0056b3; /* Azul escuro */
+    background-color: #a40000; /* Vinho escuro */
 }
 
 ul {
@@ -96,552 +80,77 @@ li button {
     background-color: #dc3545; /* Vermelho */
     font-size: 14px;
     padding: 5px 10px;
+    border: none;
+    border-radius: 4px;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
 }
 
 li button:hover {
     background-color: #a71d2a; /* Vermelho escuro */
 }
 
+/* Links */
 .home-link {
     color: inherit;
     text-decoration: none;
     cursor: pointer;
     transition: color 0.3s ease;
-  }
-  
-  .home-link:hover {
+}
+
+.home-link:hover {
+    color: #8b0000; /* Vinho */
     text-decoration: underline;
-  }
+}
 
-  /* Estilização específica para a página de relatórios */
-.pagina-relatorios {
-    max-width: 700px;
-    margin: 0 auto;
-  }
-  
-  .pagina-relatorios div[class^="relatorio-"] {
-    margin-bottom: 30px;
-    border: 1px solid #ccc;
-    padding: 15px;
-    border-radius: 10px;
-  }
-  
-  .pagina-relatorios h3 {
-    margin-top: 0;
-  }
-  
-  .pagina-relatorios label {
+/* Relatórios */
+.relatorios {
+    margin: 20px;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.relatorios h2 {
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.relatorios div {
+    margin-bottom: 20px;
+}
+
+.relatorios label {
     margin-right: 10px;
-  }
-  
-  .pagina-relatorios input[type="date"],
-  .pagina-relatorios input[type="text"] {
-    padding: 5px;
-    margin-right: 10px;
-    width: 150px;
-    max-width: 100%;
-    box-sizing: border-box;
-  }
-  
-  .pagina-relatorios button {
-    padding: 6px 12px;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-  }
-  
-  .pagina-relatorios button:hover {
-    background-color: #45a049;
-  }
-  
-  @media (max-width: 600px) {
-    .pagina-relatorios input[type="date"],
-    .pagina-relatorios input[type="text"],
-    .pagina-relatorios button {
-      display: block;
-      width: 100%;
-      margin-bottom: 10px;
-    }
-  }
-/* Estilo exclusivo para a página de categorias */
-.pagina-categorias {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 40px 20px;
+    font-weight: bold;
+    color: #555;
 }
-  
-.pagina-categorias .form-container {
-  background: #fff;
-  padding: 30px;
-  margin-top: 20px;
-  border-radius: 8px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-  max-width: 500px;
-  width: 100%;
-}
-  
-  .pagina-categorias h2 {
-    margin-top: 0;
-    color: #333;
-  }
-  
-  .pagina-categorias input[type="text"] {
-    padding: 12px;
-    margin-bottom: 20px;
-    width: 100%;
-    max-width: 100%;
-    font-size: 16px;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    box-sizing: border-box;
-  }
-  
-  
-.pagina-categorias button {
-  padding: 12px 20px;
-  width: 100%;
-  background-color: #4CAF50;
-  color: white;
-  font-size: 16px;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-  
-.pagina-categorias button:hover {
-  background-color: #45a049;
-}
-  
-.pagina-categorias ul {
-  list-style-type: none;
-  padding-left: 0;
-  margin-top: 30px;
-}
-  
-.pagina-categorias li {
-  background-color: #f9f9f9;
-  padding: 12px;
-  border: 1px solid #ddd;
-  margin-bottom: 10px;
-  border-radius: 6px;
-}
-  
-  /* Responsividade */
-@media (max-width: 600px) {
-  .pagina-categorias .form-container {
-    padding: 20px;
-  }
 
-  .pagina-categorias input[type="text"],
-  .pagina-categorias button {
-    width: 100%;
-    margin-bottom: 15px;
-  }
-}
-  /* Estilo exclusivo para a página de produtos */
-  .pagina-produtos {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 40px 20px;
-  }
-  
-  .pagina-produtos .form-container {
-    background: #fff;
-    padding: 30px;
-    margin-top: 20px;
-    border-radius: 10px;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-    max-width: 600px;
-    width: 100%;
-  }
-  
-  .pagina-produtos h2 {
-    font-size: 1.5em;
-    color: #333;
-    margin-bottom: 20px;
-    text-align: center;
-  }
-  
-  .pagina-produtos input[type="text"],
-  .pagina-produtos input[type="number"] {
-    padding: 12px;
-    margin-bottom: 15px;
-    width: 100%;
-    box-sizing: border-box;
-    font-size: 16px;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-  }
-  
-  .pagina-produtos button {
-    padding: 12px 20px;
-    width: 100%;
-    background-color: #4CAF50;
+.relatorios button {
+    padding: 8px 16px;
+    background-color: #8b0000; /* Vinho */
     color: white;
-    font-size: 16px;
     border: none;
-    border-radius: 6px;
+    border-radius: 4px;
     cursor: pointer;
+    font-size: 14px;
     transition: background-color 0.3s ease;
-  }
-  
-  .pagina-produtos button:hover {
-    background-color: #45a049;
-  }
-  
-  .pagina-produtos ul {
-    list-style-type: none;
-    padding-left: 0;
-    margin-top: 30px;
-    width: 100%;
-    max-width: 600px;
-  }
-  
-  .pagina-produtos li {
-    background-color: #f9f9f9;
-    padding: 12px;
-    border: 1px solid #ddd;
-    margin-bottom: 10px;
-    border-radius: 6px;
-  }
-  
-  /* Responsividade */
-  @media (max-width: 600px) {
-    .pagina-produtos .form-container {
-      padding: 20px;
+}
+
+.relatorios button:hover {
+    background-color: #a40000; /* Vinho escuro */
+}
+
+/* Ajustes para responsividade */
+@media (max-width: 768px) {
+    .form-container, .relatorios {
+        width: 95%;
     }
-  
-    .pagina-produtos input[type="text"],
-    .pagina-produtos input[type="number"],
-    .pagina-produtos button {
-      width: 100%;
-      margin-bottom: 15px;
+
+    button {
+        font-size: 14px;
+        padding: 8px;
     }
-  }
-  
-  /* Estilo exclusivo para a página de vendas */
-  .pagina-vendas {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 40px 20px;
-  }
-  
-  .pagina-vendas .form-container {
-    background: #fff;
-    padding: 30px;
-    margin-top: 20px;
-    border-radius: 10px;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-    max-width: 600px;
-    width: 100%;
-  }
-  
-  .pagina-vendas h2 {
-    font-size: 1.5em;
-    color: #333;
-    margin-bottom: 20px;
-    text-align: center;
-  }
-  
-  .pagina-vendas input[type="text"],
-  .pagina-vendas input[type="number"],
-  .pagina-vendas select {
-    padding: 12px;
-    margin-bottom: 15px;
-    width: 100%;
-    box-sizing: border-box;
-    font-size: 16px;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-  }
-  
-  .pagina-vendas .product-item {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 15px;
-  }
-  
-  .pagina-vendas .product-item input {
-    flex: 1;
-    padding: 12px;
-    font-size: 16px;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    box-sizing: border-box;
-  }
-  
-  .pagina-vendas button {
-    padding: 12px 20px;
-    width: 100%;
-    background-color: #4CAF50;
-    color: white;
-    font-size: 16px;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    margin-top: 10px;
-  }
-  
-  .pagina-vendas button:hover {
-    background-color: #45a049;
-  }
-  
-  .pagina-vendas ul {
-    list-style-type: none;
-    padding-left: 0;
-    margin-top: 30px;
-    width: 100%;
-    max-width: 600px;
-  }
-  
-  .pagina-vendas li {
-    background-color: #f9f9f9;
-    padding: 12px;
-    border: 1px solid #ddd;
-    margin-bottom: 10px;
-    border-radius: 6px;
-  }
-  
-  /* Responsividade */
-  @media (max-width: 600px) {
-    .pagina-vendas .form-container {
-      padding: 20px;
-    }
-  
-    .pagina-vendas .product-item {
-      flex-direction: column;
-    }
-  
-    .pagina-vendas input[type="text"],
-    .pagina-vendas input[type="number"],
-    .pagina-vendas select,
-    .pagina-vendas button {
-      width: 100%;
-      margin-bottom: 15px;
-    }
-  }
-  
-/* Estilo exclusivo para a página de vendas diárias */
-.pagina-vendas-diarias {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 40px 20px;
 }
-
-.pagina-vendas-diarias .form-container {
-  background: #fff;
-  padding: 30px;
-  margin-top: 20px;
-  border-radius: 10px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-  max-width: 600px;
-  width: 100%;
-}
-
-.pagina-vendas-diarias h2 {
-  font-size: 1.5em;
-  color: #333;
-  margin-bottom: 20px;
-  text-align: center;
-}
-
-.pagina-vendas-diarias button {
-  padding: 12px 20px;
-  background-color: #2196F3;
-  color: white;
-  font-size: 16px;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-  margin-bottom: 20px;
-  width: 100%;
-}
-
-.pagina-vendas-diarias button:hover {
-  background-color: #1976D2;
-}
-
-.pagina-vendas-diarias ul {
-  list-style-type: none;
-  padding-left: 0;
-  margin-top: 20px;
-  width: 100%;
-  max-width: 600px;
-}
-
-.pagina-vendas-diarias li {
-  background-color: #f1f1f1;
-  padding: 12px;
-  border-radius: 6px;
-  margin-bottom: 10px;
-  font-size: 16px;
-}
-
-/* Responsividade */
-@media (max-width: 600px) {
-  .pagina-vendas-diarias .form-container {
-    padding: 20px;
-  }
-
-  .pagina-vendas-diarias button {
-    width: 100%;
-  }
-}
-
-/* Estilo exclusivo para a página de controle de caixa */
-.pagina-caixa {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 40px 20px;
-}
-
-.pagina-caixa .form-container {
-  background: #fff;
-  padding: 30px;
-  margin-top: 20px;
-  border-radius: 10px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-  max-width: 600px;
-  width: 100%;
-}
-
-.pagina-caixa h2,
-.pagina-caixa h3 {
-  font-size: 1.5em;
-  color: #333;
-  margin-bottom: 20px;
-  text-align: center;
-}
-
-.pagina-caixa button {
-  padding: 12px 20px;
-  background-color: #FF9800;
-  color: white;
-  font-size: 16px;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-  margin: 0 10px 15px 0;
-}
-
-.pagina-caixa button:disabled {
-  background-color: #ccc;
-  cursor: not-allowed;
-}
-
-.pagina-caixa button:hover:enabled {
-  background-color: #FB8C00;
-}
-
-.pagina-caixa p {
-  font-size: 16px;
-  margin: 8px 0;
-}
-
-/* Responsividade */
-@media (max-width: 600px) {
-  .pagina-caixa .form-container {
-    padding: 20px;
-  }
-
-  .pagina-caixa button {
-    width: 100%;
-    margin: 0 0 15px 0;
-  }
-}
-
-/* Estilo exclusivo para a página de vendedores */
-.pagina-vendedor {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 40px 20px;
-}
-
-.pagina-vendedor .form-container {
-  background: #fff;
-  padding: 30px;
-  margin-top: 20px;
-  border-radius: 10px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-  max-width: 600px;
-  width: 100%;
-}
-
-.pagina-vendedor h2 {
-  font-size: 1.5em;
-  color: #333;
-  margin-bottom: 20px;
-  text-align: center;
-}
-
-.pagina-vendedor input[type="text"],
-.pagina-vendedor input[type="email"] {
-  padding: 10px;
-  margin-bottom: 15px;
-  width: 100%;
-  box-sizing: border-box;
-  font-size: 15px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-}
-
-.pagina-vendedor button {
-  padding: 12px 20px;
-  background-color: #607D8B;
-  color: white;
-  font-size: 16px;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.pagina-vendedor button:hover {
-  background-color: #546E7A;
-}
-
-.pagina-vendedor ul {
-  list-style-type: none;
-  padding-left: 0;
-  margin-top: 20px;
-  width: 100%;
-}
-
-.pagina-vendedor li {
-  background-color: #f9f9f9;
-  padding: 12px;
-  border: 1px solid #ddd;
-  margin-bottom: 8px;
-  border-radius: 6px;
-}
-
-/* Responsividade */
-@media (max-width: 600px) {
-  .pagina-vendedor .form-container {
-    padding: 20px;
-  }
-
-  .pagina-vendedor input,
-  .pagina-vendedor button {
-    width: 100%;
-  }
-}
-

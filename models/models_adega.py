@@ -12,7 +12,7 @@ class Produto(db.Model):
     quantidade = db.Column(db.Integer, default=0)
 
     # Relação com vendas
-    vendas = db.relationship('Venda', backref='produto', lazy=True)
+    vendas = db.relationship('Venda', backref='produto', lazy=True, cascade='all, delete-orphan')
 
 class Vendedor(db.Model):
     __tablename__ = 'vendedor'
@@ -65,3 +65,4 @@ class Caixa(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     data_abertura = db.Column(db.DateTime, nullable=False)
     data_fechamento = db.Column(db.DateTime, nullable=True)
+    data = db.Column(db.DateTime, default=datetime.utcnow)
