@@ -1,22 +1,51 @@
 from flask import Blueprint, request, jsonify
-from controllers.produtos_controller import cadastrar_produto, listar_produtos
+from models.models_adega import db, Produto
 
 produtos_bp = Blueprint('produtos', __name__)
 
 @produtos_bp.route('/cadastrar', methods=['POST'])
-def cadastrar():
+def cadastrar_produto():
     try:
         data = request.json
-        result, status_code = cadastrar_produto(data)
-        return jsonify(result), status_code
+        print("Dados recebidos no backend:", data)  # Log para depuração
+
+        # Validação dos campos obrigatórios
+        if not data.get('produto') or not data.get('categoria_id') or not data.get('preco_custo') or not data.get('preco_venda'):
+            return jsonify({'message': 'Todos os campos obrigatórios devem ser preenchidos!'}), 400
+
+        # Criar o produto
+        novo_produto = Produto(
+            produto=data['produto'],
+            categoria_id=data['categoria_id'],
+            preco_custo=data['preco_custo'],
+            preco_venda=data['preco_venda'],
+            quantidade=data.get('quantidade', 0)
+        )
+        db.session.add(novo_produto)
+        db.session.commit()
+
+        return jsonify({'message': 'Produto cadastrado com sucesso!'}), 201
     except Exception as e:
+        db.session.rollback()
+        print(f"Erro ao cadastrar produto: {str(e)}")  # Log de erro
         return jsonify({'message': f'Erro ao cadastrar produto: {str(e)}'}), 500
 
 @produtos_bp.route('/listar', methods=['GET'])
-def listar():
+def listar_produtos():
     try:
-        result = listar_produtos()
-        return jsonify(result), 200
+        produtos = Produto.query.all()
+        produtos_list = [
+            {
+                'id': p.id,
+                'produto': p.produto,
+                'categoria_id': p.categoria_id,
+                'preco_custo': p.preco_custo,
+                'preco_venda': p.preco_venda,
+                'quantidade': p.quantidade
+            }
+            for p in produtos
+        ]
+        return jsonify(produtos_list), 200
     except Exception as e:
         return jsonify({'message': f'Erro ao listar produtos: {str(e)}'}), 500
 
