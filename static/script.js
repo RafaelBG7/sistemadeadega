@@ -69,28 +69,53 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Adicionar Categoria
     document.getElementById('category-form').addEventListener('submit', function (event) {
-        event.preventDefault();
+        event.preventDefault(); // Prevenir o comportamento padrão do formulário
+
         const categoryName = document.getElementById('category-name').value;
 
+        // Verificar se o campo está preenchido
+        if (!categoryName.trim()) {
+            alert('O nome da categoria é obrigatório!');
+            return;
+        }
+
+        // Enviar a requisição POST para o backend
         fetch('/categorias/cadastrar', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                'Cache-Control': 'no-cache', // Evitar cache
             },
             body: JSON.stringify({ nome: categoryName }),
         })
-            .then(response => response.json())
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Erro ao cadastrar categoria');
+                }
+                return response.json();
+            })
             .then(data => {
                 alert(data.message || 'Categoria adicionada com sucesso!');
-                listarCategorias();
+                document.getElementById('category-name').value = ''; // Limpar o campo
+                listarCategorias(); // Atualizar a lista de categorias
             })
             .catch(error => console.error('Erro ao adicionar categoria:', error));
     });
 
     // Listar Categorias
     function listarCategorias() {
-        fetch('/categorias/listar')
-            .then(response => response.json())
+        fetch('/categorias/listar', {
+            method: 'GET',
+            headers: {
+                'Cache-Control': 'no-cache', // Evitar cache
+            },
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Erro ao listar categorias');
+                }
+                return response.json();
+            })
             .then(data => {
                 const categoryList = document.getElementById('category-list');
                 categoryList.innerHTML = '';
@@ -103,7 +128,7 @@ document.addEventListener('DOMContentLoaded', function () {
             .catch(error => console.error('Erro ao listar categorias:', error));
     }
 
-    // Inicializar listagem de categorias
+    // Inicializar listagem de categorias ao carregar a página
     listarCategorias();
 
     // Função para buscar categorias pelo nome

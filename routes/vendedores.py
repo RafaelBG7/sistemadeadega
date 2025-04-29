@@ -10,28 +10,34 @@ vendedores_bp = Blueprint('vendedores', __name__)
 
 @vendedores_bp.route('/cadastrar', methods=['POST'])
 def cadastrar():
-    data = request.json
-    if not data:
-        return jsonify({'message': 'Dados não fornecidos!'}), 400
-
-    result, status_code = cadastrar_vendedor(data)
-    return jsonify(result), status_code
+    try:
+        data = request.json
+        result, status_code = cadastrar_vendedor(data)
+        return jsonify(result), status_code
+    except Exception as e:
+        return jsonify({'message': f'Erro ao cadastrar vendedor: {str(e)}'}), 500
 
 @vendedores_bp.route('/listar', methods=['GET'])
 def listar():
-    result = listar_vendedores()
-    return jsonify(result)
+    try:
+        result = listar_vendedores()
+        return jsonify(result), 200
+    except Exception as e:
+        return jsonify({'message': f'Erro ao listar vendedores: {str(e)}'}), 500
 
 @vendedores_bp.route('/<int:vendedor_id>', methods=['PUT'])
 def atualizar(vendedor_id):
-    data = request.json
-    if not data:
-        return jsonify({'message': 'Dados não fornecidos!'}), 400
-
-    result, status_code = atualizar_vendedor(vendedor_id, data)
-    return jsonify(result), status_code
+    try:
+        data = request.json
+        result, status_code = atualizar_vendedor(vendedor_id, data)
+        return jsonify(result), status_code
+    except Exception as e:
+        return jsonify({'message': f'Erro ao atualizar vendedor: {str(e)}'}), 500
 
 @vendedores_bp.route('/<int:vendedor_id>', methods=['DELETE'])
 def deletar(vendedor_id):
-    result, status_code = deletar_vendedor(vendedor_id)
-    return jsonify(result), status_code
+    try:
+        result, status_code = deletar_vendedor(vendedor_id)
+        return jsonify(result), status_code
+    except Exception as e:
+        return jsonify({'message': f'Erro ao deletar vendedor: {str(e)}'}), 500

@@ -5,18 +5,20 @@ produtos_bp = Blueprint('produtos', __name__)
 
 @produtos_bp.route('/cadastrar', methods=['POST'])
 def cadastrar():
-    data = request.json
-    if not data:
-        return jsonify({'message': 'Dados não fornecidos!'}), 400
-
-    # Chamar a função do controlador e desempacotar os valores retornados
-    result, status_code = cadastrar_produto(data)
-    return jsonify(result), status_code
+    try:
+        data = request.json
+        result, status_code = cadastrar_produto(data)
+        return jsonify(result), status_code
+    except Exception as e:
+        return jsonify({'message': f'Erro ao cadastrar produto: {str(e)}'}), 500
 
 @produtos_bp.route('/listar', methods=['GET'])
 def listar():
-    result = listar_produtos()
-    return jsonify(result)
+    try:
+        result = listar_produtos()
+        return jsonify(result), 200
+    except Exception as e:
+        return jsonify({'message': f'Erro ao listar produtos: {str(e)}'}), 500
 
 @produtos_bp.route('/buscar', methods=['GET'])
 def buscar_por_nome():

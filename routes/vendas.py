@@ -5,18 +5,27 @@ vendas_bp = Blueprint('vendas', __name__)
 
 @vendas_bp.route('/realizar', methods=['POST'])
 def realizar():
-    data = request.json
-    result = realizar_venda(data)
-    if isinstance(result, tuple):  # Caso de erro com status code
-        return jsonify(result[0]), result[1]
-    return jsonify(result)
+    try:
+        data = request.json
+        result = realizar_venda(data)
+        if isinstance(result, tuple):
+            return jsonify(result[0]), result[1]
+        return jsonify(result), 201
+    except Exception as e:
+        return jsonify({'message': f'Erro ao realizar venda: {str(e)}'}), 500
 
 @vendas_bp.route('/relatorio', methods=['GET'])
 def gerar_relatorio():
-    result = relatorio()
-    return jsonify(result)
+    try:
+        result = relatorio()
+        return jsonify(result), 200
+    except Exception as e:
+        return jsonify({'message': f'Erro ao gerar relatório: {str(e)}'}), 500
 
 @vendas_bp.route('/diarias', methods=['GET'])
 def vendas_diarias_route():
-    result = vendas_diarias()
-    return jsonify(result)
+    try:
+        result = vendas_diarias()
+        return jsonify(result), 200
+    except Exception as e:
+        return jsonify({'message': f'Erro ao obter vendas diárias: {str(e)}'}), 500
