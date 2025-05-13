@@ -187,10 +187,15 @@ document.addEventListener('DOMContentLoaded', function () {
             .catch(error => console.error('Erro ao cadastrar produto:', error));
     });
 
-    // Função para listar produtos
+    // Atualizar a função listarProdutos
     function listarProdutos() {
         fetch('/produtos/listar')
-            .then(response => response.json())
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Erro ao listar produtos');
+                }
+                return response.json();
+            })
             .then(data => {
                 const productList = document.getElementById('product-list');
                 productList.innerHTML = '';
@@ -198,9 +203,31 @@ document.addEventListener('DOMContentLoaded', function () {
                     const li = document.createElement('li');
                     li.innerHTML = `
                         ID: ${produto.id} | Nome: ${produto.produto} | Preço de Venda: R$${produto.preco_venda.toFixed(2)} | Quantidade: ${produto.quantidade}
-                        <button class="remove-product" data-id="${produto.id}">X</button>
+                        <button class="edit-product" data-id="${produto.id}" data-nome="${produto.produto}" data-categoria="${produto.categoria_id}" data-preco-custo="${produto.preco_custo}" data-preco-venda="${produto.preco_venda}" data-quantidade="${produto.quantidade}">Editar</button>
+                        <button class="remove-product" data-id="${produto.id}">Remover</button>
                     `;
                     productList.appendChild(li);
+
+                    // Adicionar evento de clique ao botão "Editar"
+                    li.querySelector('.edit-product').addEventListener('click', function () {
+                        const productId = this.getAttribute('data-id');
+                        const productName = this.getAttribute('data-nome');
+                        const categoryId = this.getAttribute('data-categoria');
+                        const purchasePrice = this.getAttribute('data-preco-custo');
+                        const sellingPrice = this.getAttribute('data-preco-venda');
+                        const quantity = this.getAttribute('data-quantidade');
+
+                        // Preencher o formulário de edição com os dados do produto
+                        document.getElementById('edit-product-id').value = productId;
+                        document.getElementById('edit-product-name').value = productName;
+                        document.getElementById('edit-product-category-id').value = categoryId;
+                        document.getElementById('edit-purchase-price').value = purchasePrice;
+                        document.getElementById('edit-selling-price').value = sellingPrice;
+                        document.getElementById('edit-product-quantity').value = quantity;
+
+                        // Rolagem para o formulário de edição
+                        document.querySelector('.editar-produto').scrollIntoView({ behavior: 'smooth' });
+                    });
 
                     // Adicionar evento de clique ao botão "Remover"
                     li.querySelector('.remove-product').addEventListener('click', function () {
@@ -217,7 +244,12 @@ document.addEventListener('DOMContentLoaded', function () {
             fetch(`/produtos/${productId}`, {
                 method: 'DELETE',
             })
-                .then(response => response.json())
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Erro ao remover produto');
+                    }
+                    return response.json();
+                })
                 .then(data => {
                     alert(data.message || 'Produto removido com sucesso!');
                     listarProdutos(); // Atualizar a lista de produtos
@@ -228,6 +260,51 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Inicializar listagem de produtos
     listarProdutos();
+
+    // Função para editar um produto
+    function editarProduto() {
+        const produtoId = document.getElementById('edit-product-id').value;
+        const productName = document.getElementById('edit-product-name').value;
+        const categoryId = document.getElementById('edit-product-category-id').value;
+        const purchasePrice = parseFloat(document.getElementById('edit-purchase-price').value);
+        const sellingPrice = parseFloat(document.getElementById('edit-selling-price').value);
+        const quantity = parseInt(document.getElementById('edit-product-quantity').value, 10);
+
+        if (!produtoId || isNaN(produtoId)) {
+            alert('Por favor, insira um ID de produto válido.');
+            return;
+        }
+
+        const payload = {
+            produto: productName || undefined,
+            categoria_id: categoryId || undefined,
+            preco_custo: isNaN(purchasePrice) ? undefined : purchasePrice,
+            preco_venda: isNaN(sellingPrice) ? undefined : sellingPrice,
+            quantidade: isNaN(quantity) ? undefined : quantity,
+        };
+
+        fetch(`/produtos/editar/${produtoId}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(payload),
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Erro ao editar produto');
+                }
+                return response.json();
+            })
+            .then(data => {
+                alert(data.message || 'Produto editado com sucesso!');
+                listarProdutos(); // Atualizar a lista de produtos
+            })
+            .catch(error => console.error('Erro ao editar produto:', error));
+    }
+
+    // Adicionar evento ao botão de editar produto
+    document.getElementById('edit-product-button').addEventListener('click', editarProduto);
 
     // Adicionar Vendedor
     document.getElementById('vendor-form').addEventListener('submit', function (event) {
@@ -424,4 +501,40 @@ document.addEventListener('DOMContentLoaded', function () {
             })
             .catch(error => console.error('Erro ao gerar relatório por produto:', error));
     });
+
+    // Função para listar produtos com estoque baixo
+    function listarEstoqueBaixo() {
+        const limiteInput = document.getElementById('low-stock-limit');
+        const limite = parseInt(limiteInput.value, 10);
+
+        if (isNaN(limite) || limite <= 0) {
+            alert('Por favor, insira um número válido para o limite de estoque.');
+            return;
+        }
+
+        fetch(`/produtos/estoque-baixo?limite=${limite}`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Erro ao buscar produtos com estoque baixo');
+                }
+                return response.json();
+            })
+            .then(data => {
+                const lowStockList = document.getElementById('low-stock-list');
+                lowStockList.innerHTML = '';
+                if (data.length === 0) {
+                    lowStockList.innerHTML = '<li>Nenhum produto com estoque baixo encontrado.</li>';
+                    return;
+                }
+                data.forEach(produto => {
+                    const li = document.createElement('li');
+                    li.textContent = `ID: ${produto.id} | Nome: ${produto.produto} | Quantidade: ${produto.quantidade} | Categoria: ${produto.categoria}`;
+                    lowStockList.appendChild(li);
+                });
+            })
+            .catch(error => console.error('Erro ao listar produtos com estoque baixo:', error));
+    }
+
+    // Adicionar evento ao botão de estoque baixo
+    document.getElementById('low-stock-button').addEventListener('click', listarEstoqueBaixo);
 });

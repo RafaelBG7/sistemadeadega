@@ -134,6 +134,33 @@
           <button id="gerar-relatorio-produto">Gerar Relatório</button>
           <div id="resultado-produto"></div>
         </div>
+
+        <!-- Relatório de Estoque Baixo -->
+        <div class="form-container">
+            <h2>Relatório de Estoque Baixo</h2>
+            <label for="low-stock-limit">Limite de Estoque:</label>
+            <input type="number" id="low-stock-limit" placeholder="Digite o limite de estoque" />
+            <button id="low-stock-button">Gerar Relatório</button>
+            <ul id="low-stock-list"></ul>
+        </div>
+
+        <!-- Editar Produto -->
+        <div class="editar-produto">
+            <h3>Editar Produto</h3>
+            <label for="edit-product-id">ID do Produto:</label>
+            <input type="number" id="edit-product-id" placeholder="Digite o ID do Produto" />
+            <label for="edit-product-name">Nome do Produto:</label>
+            <input type="text" id="edit-product-name" placeholder="Digite o Nome do Produto" />
+            <label for="edit-product-category-id">ID da Categoria:</label>
+            <input type="number" id="edit-product-category-id" placeholder="Digite o ID da Categoria" />
+            <label for="edit-purchase-price">Preço de Custo:</label>
+            <input type="number" step="0.01" id="edit-purchase-price" placeholder="Digite o Preço de Custo" />
+            <label for="edit-selling-price">Preço de Venda:</label>
+            <input type="number" step="0.01" id="edit-selling-price" placeholder="Digite o Preço de Venda" />
+            <label for="edit-product-quantity">Quantidade:</label>
+            <input type="number" id="edit-product-quantity" placeholder="Digite a Quantidade" />
+            <button id="edit-product-button">Editar Produto</button>
+        </div>
       </div>
 </body>
 </html>
