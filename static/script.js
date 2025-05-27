@@ -16,6 +16,23 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
+    // Preencher o select de clientes no formulário de venda
+    function preencherClientesVenda() {
+        fetch('/clientes/listar')
+            .then(response => response.json())
+            .then(clientes => {
+                const select = document.getElementById('sales-client-id');
+                select.innerHTML = '<option value="">Selecione o Cliente (opcional)</option>';
+                clientes.forEach(cliente => {
+                    const option = document.createElement('option');
+                    option.value = cliente.id;
+                    option.textContent = `${cliente.nome} (${cliente.cpf})`;
+                    select.appendChild(option);
+                });
+            });
+    }
+    preencherClientesVenda();
+
     document.getElementById('sales-form').addEventListener('submit', function (event) {
         event.preventDefault();
 
@@ -28,6 +45,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         const paymentMethod = document.getElementById('payment-method').value;
         const vendorId = document.getElementById('sales-vendor-id').value;
+        const clientId = document.getElementById('sales-client-id').value; // NOVO
 
         fetch('/vendas/realizar', {
             method: 'POST',
@@ -38,6 +56,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 produtos: products,
                 forma_pagamento: paymentMethod,
                 vendedor_id: vendorId,
+                cliente_id: clientId || null // NOVO
             }),
         })
             .then(response => response.json())
@@ -537,4 +556,54 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Adicionar evento ao botão de estoque baixo
     document.getElementById('low-stock-button').addEventListener('click', listarEstoqueBaixo);
+
+    // Cadastrar Cliente
+    document.getElementById('client-form').addEventListener('submit', function (event) {
+        event.preventDefault();
+
+        const nome = document.getElementById('client-name').value;
+        const cpf = document.getElementById('client-cpf').value;
+        const data_nascimento = document.getElementById('client-birthdate').value;
+        const telefone = document.getElementById('client-phone').value;
+        const email = document.getElementById('client-email').value;
+
+        fetch('/clientes/cadastrar', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                nome,
+                cpf,
+                data_nascimento,
+                telefone,
+                email
+            }),
+        })
+            .then(response => response.json())
+            .then(data => {
+                alert(data.message || 'Cliente cadastrado com sucesso!');
+                listarClientes();
+            })
+            .catch(error => console.error('Erro ao cadastrar cliente:', error));
+    });
+
+    // Listar Clientes
+    function listarClientes() {
+        fetch('/clientes/listar')
+            .then(response => response.json())
+            .then(data => {
+                const clientList = document.getElementById('client-list');
+                clientList.innerHTML = '';
+                data.forEach(cliente => {
+                    const li = document.createElement('li');
+                    li.textContent = `Nome: ${cliente.nome} | CPF: ${cliente.cpf} | Nascimento: ${cliente.data_nascimento} | Telefone: ${cliente.telefone} | Email: ${cliente.email}`;
+                    clientList.appendChild(li);
+                });
+            })
+            .catch(error => console.error('Erro ao listar clientes:', error));
+    }
+
+    // Inicializar listagem de clientes
+    listarClientes();
 });

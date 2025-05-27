@@ -58,6 +58,10 @@
                     <option value="Crédito">Crédito</option>
                 </select>
                 <input type="text" id="sales-vendor-id" placeholder="ID do Vendedor" required>
+                <!-- NOVO: Seleção de cliente -->
+                <select id="sales-client-id">
+                    <option value="">Selecione o Cliente (opcional)</option>
+                </select>
                 <button type="submit">Realizar Venda</button>
             </form>
             <h2>Relatório de Vendas</h2>
@@ -102,6 +106,21 @@
             </form>
             <h2>Vendedores</h2>
             <ul id="vendor-list"></ul>
+        </div>
+
+        <!-- Cliente -->
+        <div class="form-container">
+            <h2>Cadastrar Cliente</h2>
+            <form id="client-form">
+                <input type="text" id="client-name" placeholder="Nome do Cliente" required>
+                <input type="text" id="client-cpf" placeholder="CPF" required>
+                <input type="date" id="client-birthdate" placeholder="Data de Nascimento" required>
+                <input type="text" id="client-phone" placeholder="Telefone">
+                <input type="email" id="client-email" placeholder="Email" required>
+                <button type="submit">Cadastrar</button>
+            </form>
+            <h2>Clientes</h2>
+            <ul id="client-list"></ul>
         </div>
     </div>
     <script src="{{ url_for('static', filename='script.js') }}"></script>

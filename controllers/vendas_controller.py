@@ -1,4 +1,4 @@
-from models.models_adega import Produto, Venda, Vendedor, Caixa
+from models.models_adega import Produto, Venda, Vendedor, Caixa, Cliente
 from datetime import datetime, date
 from models import db
 from sqlalchemy.exc import NoResultFound
@@ -8,6 +8,7 @@ def realizar_venda(data):
     produtos = data['produtos']
     vendedor = Vendedor.query.get(data['vendedor_id'])
     forma_pagamento = data['forma_pagamento']
+    cliente_id = data.get('cliente_id')  # <-- NOVO
 
     if not vendedor or not vendedor.ativo:
         return {'message': 'Vendedor não encontrado ou inativo'}, 404
@@ -45,7 +46,8 @@ def realizar_venda(data):
                 total_venda=total_venda,
                 lucro=lucro,
                 data=datetime.utcnow(),  # Aqui a data está sendo definida
-                forma_pagamento=forma_pagamento
+                forma_pagamento=forma_pagamento,
+                cliente_id=cliente_id  # <-- NOVO
             )
             vendas.append(venda)
             db.session.add(venda)

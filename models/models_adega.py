@@ -37,6 +37,8 @@ class Venda(db.Model):
     total_venda = db.Column(db.Float, nullable=False)
     lucro = db.Column(db.Float, nullable=False)
     forma_pagamento = db.Column(db.String(20), nullable=False)
+    cliente_id = db.Column(db.Integer, db.ForeignKey('cliente.id'), nullable=True)  # <-- NOVO
+    cliente = db.relationship('Cliente', backref='vendas')  # <-- NOVO
 
     def to_dict(self):
         return {
@@ -47,7 +49,8 @@ class Venda(db.Model):
             'data': self.data.strftime('%d/%m/%Y %H:%M'),
             'total_venda': self.total_venda,
             'lucro': self.lucro,
-            'forma_pagamento': self.forma_pagamento
+            'forma_pagamento': self.forma_pagamento,
+            'cliente': self.cliente.nome if self.cliente else None  # <-- NOVO
         }
 
 class Categoria(db.Model):
@@ -66,3 +69,13 @@ class Caixa(db.Model):
     data_abertura = db.Column(db.DateTime, nullable=False)
     data_fechamento = db.Column(db.DateTime, nullable=True)
     data = db.Column(db.DateTime, default=datetime.utcnow)
+
+class Cliente(db.Model):
+    __tablename__ = 'cliente'
+
+    id = db.Column(db.Integer, primary_key=True)
+    nome = db.Column(db.String(100), nullable=False)
+    cpf = db.Column(db.String(14), unique=True, nullable=False)
+    data_nascimento = db.Column(db.Date, nullable=False)
+    telefone = db.Column(db.String(20))
+    email = db.Column(db.String(120), unique=True, nullable=False)
