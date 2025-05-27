@@ -606,4 +606,59 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Inicializar listagem de clientes
     listarClientes();
+
+    // Preencher o select de clientes para relatório
+    function preencherClientesRelatorio() {
+        fetch('/clientes/listar')
+            .then(response => response.json())
+            .then(clientes => {
+                const select = document.getElementById('cliente-relatorio-id');
+                select.innerHTML = '<option value="">Selecione o Cliente</option>';
+                clientes.forEach(cliente => {
+                    const option = document.createElement('option');
+                    option.value = cliente.id;
+                    option.textContent = `${cliente.nome} (${cliente.cpf})`;
+                    select.appendChild(option);
+                });
+            });
+    }
+    preencherClientesRelatorio();
+
+    // Gerar relatório por cliente
+    document.getElementById('gerar-relatorio-cliente').addEventListener('click', function () {
+        const clienteId = document.getElementById('cliente-relatorio-id').value;
+        if (!clienteId) {
+            alert('Selecione um cliente!');
+            return;
+        }
+        fetch(`/relatorios/cliente?cliente_id=${clienteId}`)
+            .then(response => response.json())
+            .then(data => {
+                const resultado = document.getElementById('resultado-cliente');
+                if (data.error) {
+                    resultado.innerHTML = `<p>Erro: ${data.error}</p>`;
+                    return;
+                }
+                resultado.innerHTML = `
+                    <p>Total de Vendas: R$ ${data.total_vendas.toFixed(2)}</p>
+                    <p>Lucro Total: R$ ${data.lucro_total.toFixed(2)}</p>
+                    <h4>Vendas:</h4>
+                    <ul>
+                        ${data.vendas.map(venda => `
+                            <li>
+                                Produto: ${venda.produto} |
+                                Quantidade: ${venda.quantidade} |
+                                Data: ${venda.data} |
+                                Total: R$${venda.total_venda.toFixed(2)} |
+                                Lucro: R$${venda.lucro.toFixed(2)} |
+                                Pagamento: ${venda.forma_pagamento}
+                            </li>
+                        `).join('')}
+                    </ul>
+                `;
+            })
+            .catch(error => {
+                document.getElementById('resultado-cliente').innerHTML = `<p>Erro ao gerar relatório: ${error}</p>`;
+            });
+    });
 });

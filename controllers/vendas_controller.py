@@ -241,3 +241,30 @@ def relatorio_por_produto():
         return relatorio
     except Exception as e:
         return {'error': str(e)}
+
+def relatorio_por_cliente(cliente_id):
+    try:
+        vendas = Venda.query.filter_by(cliente_id=cliente_id).all()
+        total_vendas = sum(v.total_venda for v in vendas)
+        lucro_total = sum(v.lucro for v in vendas)
+
+        relatorio = [
+            {
+                'id': v.id,
+                'produto': v.produto.produto,
+                'quantidade': v.quantidade,
+                'data': v.data.strftime('%d/%m/%Y %H:%M'),
+                'total_venda': v.total_venda,
+                'lucro': v.lucro,
+                'forma_pagamento': v.forma_pagamento
+            }
+            for v in vendas
+        ]
+
+        return {
+            'total_vendas': total_vendas,
+            'lucro_total': lucro_total,
+            'vendas': relatorio
+        }
+    except Exception as e:
+        return {'error': str(e)}
