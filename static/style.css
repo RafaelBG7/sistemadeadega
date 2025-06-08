@@ -1,156 +1,195 @@
-/* Estilo geral */
-body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
+/* Reset básico */
+* {
     margin: 0;
     padding: 0;
+    box-sizing: border-box;
 }
 
-h1, h2 {
-    text-align: center;
+body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: linear-gradient(120deg, #f8f8f8 0%, #e8e0e6 100%);
+    min-height: 100vh;
     color: #333;
-    margin-top: 20px;
+}
+
+h1, h2, h3 {
+    text-align: center;
+    color: #8b0000;
+    margin-bottom: 10px;
 }
 
 .container {
     display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin: 20px;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 24px;
+    margin: 30px auto;
+    max-width: 1200px;
 }
 
 .form-container {
     background: #fff;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    width: 80%;
-    margin-bottom: 20px;
+    padding: 24px 20px;
+    border-radius: 14px;
+    box-shadow: 0 4px 24px rgba(139,0,0,0.08);
+    width: 350px;
+    min-width: 280px;
+    margin-bottom: 24px;
+    transition: box-shadow 0.2s;
+}
+
+.form-container:hover {
+    box-shadow: 0 8px 32px rgba(139,0,0,0.13);
 }
 
 form {
     display: flex;
     flex-direction: column;
+    gap: 10px;
 }
 
 input, select {
-    margin-bottom: 10px;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #d1bcbc;
+    border-radius: 6px;
+    font-size: 15px;
+    background: #faf8fa;
+    transition: border-color 0.2s;
+}
+
+input:focus, select:focus {
+    border-color: #8b0000;
+    outline: none;
+}
+
+input:required:invalid {
+    border-color: #dc3545;
 }
 
 button {
-    padding: 10px;
+    padding: 10px 0;
     border: none;
-    border-radius: 5px;
-    background-color: #8b0000; /* Vinho */
-    color: white;
-    cursor: pointer;
+    border-radius: 6px;
+    background: linear-gradient(90deg, #8b0000 60%, #a40000 100%);
+    color: #fff;
     font-size: 16px;
-    transition: background-color 0.3s ease;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 6px;
+    transition: background 0.2s, transform 0.1s;
 }
 
 button:hover {
-    background-color: #a40000; /* Vinho escuro */
+    background: linear-gradient(90deg, #a40000 60%, #8b0000 100%);
+    transform: translateY(-2px) scale(1.03);
 }
 
 ul {
-    list-style-type: none;
-    padding: 0;
-    margin: 0;
+    list-style: none;
+    margin-top: 10px;
 }
 
 li {
-    background: #e9e9e9;
-    margin: 5px 0;
-    padding: 10px;
-    border-radius: 5px;
+    background: #f6eaea;
+    margin-bottom: 7px;
+    padding: 10px 12px;
+    border-radius: 6px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-}
-
-li span {
-    font-weight: bold;
+    font-size: 15px;
 }
 
 li button {
-    background-color: #dc3545; /* Vermelho */
-    font-size: 14px;
+    background: #dc3545;
+    font-size: 13px;
     padding: 5px 10px;
-    border: none;
     border-radius: 4px;
-    color: white;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+    margin-left: 8px;
+    transition: background 0.2s;
+}
+
+li button.edit-product {
+    background: #8b0000;
 }
 
 li button:hover {
-    background-color: #a71d2a; /* Vermelho escuro */
+    background: #a71d2a;
 }
 
-/* Links */
 .home-link {
-    color: inherit;
+    color: #8b0000;
     text-decoration: none;
-    cursor: pointer;
-    transition: color 0.3s ease;
+    font-weight: 600;
+    transition: color 0.2s;
 }
 
 .home-link:hover {
-    color: #8b0000; /* Vinho */
+    color: #a40000;
     text-decoration: underline;
 }
 
-/* Relatórios */
 .relatorios {
-    margin: 20px;
-    padding: 20px;
-    background-color: #fff;
-    border-radius: 8px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    margin: 30px auto;
+    padding: 24px;
+    background: #fff;
+    border-radius: 14px;
+    box-shadow: 0 4px 24px rgba(139,0,0,0.08);
+    max-width: 900px;
 }
 
 .relatorios h2 {
-    margin-bottom: 20px;
-    color: #333;
+    color: #8b0000;
+    margin-bottom: 18px;
 }
 
 .relatorios div {
-    margin-bottom: 20px;
+    margin-bottom: 18px;
 }
 
 .relatorios label {
-    margin-right: 10px;
-    font-weight: bold;
+    margin-right: 8px;
+    font-weight: 500;
     color: #555;
 }
 
 .relatorios button {
-    padding: 8px 16px;
-    background-color: #8b0000; /* Vinho */
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 14px;
-    transition: background-color 0.3s ease;
+    padding: 8px 18px;
+    font-size: 15px;
+    margin-top: 0;
 }
 
-.relatorios button:hover {
-    background-color: #a40000; /* Vinho escuro */
+#toast {
+    display: none;
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 9999;
+    padding: 16px 24px;
+    background: #8b0000;
+    color: #fff;
+    border-radius: 8px;
+    font-weight: 600;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.12);
 }
 
-/* Ajustes para responsividade */
-@media (max-width: 768px) {
+@media (max-width: 900px) {
+    .container {
+        flex-direction: column;
+        align-items: center;
+        gap: 0;
+    }
     .form-container, .relatorios {
-        width: 95%;
+        width: 98%;
+        min-width: unset;
     }
+}
 
-    button {
-        font-size: 14px;
-        padding: 8px;
-    }
+::-webkit-scrollbar {
+    width: 8px;
+    background: #f4f4f4;
+}
+::-webkit-scrollbar-thumb {
+    background: #d1bcbc;
+    border-radius: 6px;
 }

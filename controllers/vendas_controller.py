@@ -74,7 +74,11 @@ def realizar_venda(data):
 
         db.session.commit()
         print("Vendas realizadas com sucesso:", vendas)  # Log para depuração
-        return {'message': 'Venda realizada com sucesso!'}, 201
+        valor_total = sum(v.total_venda for v in vendas)
+        return {
+            'message': 'Venda realizada com sucesso!',
+            'valor_total': valor_total
+        }, 201
     except Exception as e:
         db.session.rollback()
         print(f"Erro ao realizar venda: {str(e)}")  # Log de erro

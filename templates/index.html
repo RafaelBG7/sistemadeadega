@@ -1,29 +1,30 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sistema de Adega</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-    <h1>Sistema de Adega</h1>
+    <div id="toast"></div>
+    <h1><i class="fa-solid fa-wine-bottle"></i> Sistema de Adega</h1>
     <div class="container">
         <!-- Categoria -->
         <div class="form-container">
-            <h2>Adicionar Categoria</h2>
+            <h2><i class="fa-solid fa-layer-group"></i> Adicionar Categoria</h2>
             <form id="category-form">
                 <input type="text" id="category-name" placeholder="Nome da Categoria" required>
-                <button type="submit">Adicionar</button>
+                <button type="submit"><i class="fa-solid fa-plus"></i> Adicionar</button>
             </form>
-            <h2>Categorias</h2>
+            <h2><i class="fa-solid fa-list"></i> Categorias</h2>
             <ul id="category-list"></ul>
         </div>
 
-
         <!-- Produto -->
         <div class="form-container">
-            <h2>Adicionar Produto</h2>
+            <h2><i class="fa-solid fa-box"></i> Adicionar Produto</h2>
             <form id="product-form">
                 <input type="text" id="product-name" placeholder="Nome do Produto" required>
                 <input type="text" id="product-category" placeholder="Nome da Categoria" required>
@@ -31,17 +32,15 @@
                 <input type="text" id="purchase-price" placeholder="Valor de Compra" required>
                 <input type="text" id="selling-price" placeholder="Valor de Venda" required>
                 <input type="number" id="product-quantity" placeholder="Quantidade" required>
-                <button type="submit">Adicionar</button>
+                <button type="submit"><i class="fa-solid fa-plus"></i> Adicionar</button>
             </form>
-            <h2>Produtos</h2>
-            <ul id="product-list">
-                <!-- Os itens serão gerados dinamicamente pelo JavaScript -->
-            </ul>
+            <h2><i class="fa-solid fa-list"></i> Produtos</h2>
+            <ul id="product-list"></ul>
         </div>
 
         <!-- Vendas -->
         <div class="form-container">
-            <h2>Realizar Venda</h2>
+            <h2><i class="fa-solid fa-cash-register"></i> Realizar Venda</h2>
             <form id="sales-form">
                 <div id="products-container">
                     <div class="product-item">
@@ -49,7 +48,7 @@
                         <input type="number" class="product-quantity" placeholder="Quantidade" required>
                     </div>
                 </div>
-                <button type="button" id="add-product">Adicionar Produto</button>
+                <button type="button" id="add-product"><i class="fa-solid fa-plus"></i> Adicionar Produto</button>
                 <select id="payment-method" required>
                     <option value="">Selecione a Forma de Pagamento</option>
                     <option value="Dinheiro">Dinheiro</option>
@@ -63,16 +62,16 @@
                     <option value="">Selecione o Cliente (opcional)</option>
                 </select>
                 <div id="fidelidade-status"></div>
-                <button type="submit">Realizar Venda</button>
+                <button type="submit"><i class="fa-solid fa-cart-shopping"></i> Realizar Venda</button>
             </form>
-            <h2>Relatório de Vendas</h2>
+            <h2><i class="fa-solid fa-chart-line"></i> Relatório de Vendas</h2>
             <ul id="sales-report"></ul>
         </div>
 
         <!-- Vendas Diárias -->
         <div class="form-container">
-            <h2>Vendas Diárias</h2>
-            <button id="daily-sales-refresh">Atualizar</button>
+            <h2><i class="fa-solid fa-calendar-day"></i> Vendas Diárias</h2>
+            <button id="daily-sales-refresh"><i class="fa-solid fa-rotate"></i> Atualizar</button>
             <ul id="daily-sales-summary">
                 <li><strong>Total de Vendas:</strong> R$<span id="daily-total-sales">0.00</span></li>
                 <li><strong>Lucro Total:</strong> R$<span id="daily-total-profit">0.00</span></li>
@@ -83,10 +82,10 @@
 
         <!-- Controle de Caixa -->
         <div class="form-container">
-            <h2>Controle de Caixa</h2>
-            <button id="open-cash-register">Abrir Caixa</button>
-            <button id="close-cash-register" disabled>Fechar Caixa</button>
-            <button id="refresh-cash-register">Atualizar Caixa</button> <!-- Novo botão -->
+            <h2><i class="fa-solid fa-vault"></i> Controle de Caixa</h2>
+            <button id="open-cash-register"><i class="fa-solid fa-door-open"></i> Abrir Caixa</button>
+            <button id="close-cash-register" disabled><i class="fa-solid fa-door-closed"></i> Fechar Caixa</button>
+            <button id="refresh-cash-register"><i class="fa-solid fa-rotate"></i> Atualizar Caixa</button> <!-- Novo botão -->
             <div id="cash-register-status">
                 <p><strong>Status do Caixa:</strong> <span id="cash-register-state">Fechado</span></p>
             </div>
@@ -98,75 +97,75 @@
 
         <!-- Vendedor -->
         <div class="form-container">
-            <h2>Adicionar Vendedor</h2>
+            <h2><i class="fa-solid fa-user-tie"></i> Adicionar Vendedor</h2>
             <form id="vendor-form">
                 <input type="text" id="vendor-name" placeholder="Nome do Vendedor" required>
                 <input type="email" id="vendor-email" placeholder="Email do Vendedor" required>
                 <input type="text" id="vendor-phone" placeholder="Telefone do Vendedor">
-                <button type="submit">Adicionar</button>
+                <button type="submit"><i class="fa-solid fa-plus"></i> Adicionar</button>
             </form>
-            <h2>Vendedores</h2>
+            <h2><i class="fa-solid fa-users"></i> Vendedores</h2>
             <ul id="vendor-list"></ul>
         </div>
 
         <!-- Cliente -->
         <div class="form-container">
-            <h2>Cadastrar Cliente</h2>
+            <h2><i class="fa-solid fa-user-plus"></i> Cadastrar Cliente</h2>
             <form id="client-form">
                 <input type="text" id="client-name" placeholder="Nome do Cliente" required>
                 <input type="text" id="client-cpf" placeholder="CPF" required>
                 <input type="date" id="client-birthdate" placeholder="Data de Nascimento" required>
                 <input type="text" id="client-phone" placeholder="Telefone">
                 <input type="email" id="client-email" placeholder="Email" required>
-                <button type="submit">Cadastrar</button>
+                <button type="submit"><i class="fa-solid fa-plus"></i> Cadastrar</button>
             </form>
-            <h2>Clientes</h2>
+            <h2><i class="fa-solid fa-users"></i> Clientes</h2>
             <ul id="client-list"></ul>
         </div>
     </div>
     <script src="{{ url_for('static', filename='script.js') }}"></script>
     <div class="relatorios">
-        <h2>Relatórios</h2>
+        <h2><i class="fa-solid fa-file-lines"></i> Relatórios</h2>
       
         <!-- Relatório por Período -->
         <div class="relatorio-periodo">
-            <h3>Relatório por Período</h3>
+            <h3><i class="fa-solid fa-calendar-days"></i> Relatório por Período</h3>
             <label for="inicio">Início:</label>
             <input type="date" id="inicio" />
             <label for="fim">Fim:</label>
             <input type="date" id="fim" />
-            <button id="gerar-relatorio-periodo">Gerar Relatório</button>
+            <button id="gerar-relatorio-periodo"><i class="fa-solid fa-file-lines"></i> Gerar Relatório</button>
             <div id="resultado-periodo"></div>
           </div>
       
         <!-- Relatório por Vendedor -->
         <div class="relatorio-vendedor">
-          <h3>Relatório por Vendedor</h3>
+          <h3><i class="fa-solid fa-user-tie"></i> Relatório por Vendedor</h3>
           <label for="vendedor-id">Vendedor:</label>
           <input type="text" id="vendedor-id" placeholder="ID do Vendedor" />
-          <button id="gerar-relatorio-vendedor">Gerar Relatório</button>
+          <button id="gerar-relatorio-vendedor"><i class="fa-solid fa-file-lines"></i> Gerar Relatório</button>
           <div id="resultado-vendedor"></div>
         </div>
       
         <!-- Relatório por Produto -->
         <div class="relatorio-produto">
-          <h3>Relatório por Produto</h3>
-          <button id="gerar-relatorio-produto">Gerar Relatório</button>
+          <h3><i class="fa-solid fa-box"></i> Relatório por Produto</h3>
+          <button id="gerar-relatorio-produto"><i class="fa-solid fa-file-lines"></i> Gerar Relatório</button>
           <div id="resultado-produto"></div>
         </div>
 
         <!-- Relatório de Estoque Baixo -->
         <div class="form-container">
-            <h2>Relatório de Estoque Baixo</h2>
+            <h2><i class="fa-solid fa-triangle-exclamation"></i> Relatório de Estoque Baixo</h2>
             <label for="low-stock-limit">Limite de Estoque:</label>
             <input type="number" id="low-stock-limit" placeholder="Digite o limite de estoque" />
-            <button id="low-stock-button">Gerar Relatório</button>
+            <button id="low-stock-button"><i class="fa-solid fa-file-lines"></i> Gerar Relatório</button>
             <ul id="low-stock-list"></ul>
         </div>
 
         <!-- Editar Produto -->
         <div class="editar-produto">
-            <h3>Editar Produto</h3>
+            <h3><i class="fa-solid fa-pen-to-square"></i> Editar Produto</h3>
             <label for="edit-product-id">ID do Produto:</label>
             <input type="number" id="edit-product-id" placeholder="Digite o ID do Produto" />
             <label for="edit-product-name">Nome do Produto:</label>
@@ -179,17 +178,17 @@
             <input type="number" step="0.01" id="edit-selling-price" placeholder="Digite o Preço de Venda" />
             <label for="edit-product-quantity">Quantidade:</label>
             <input type="number" id="edit-product-quantity" placeholder="Digite a Quantidade" />
-            <button id="edit-product-button">Editar Produto</button>
+            <button id="edit-product-button"><i class="fa-solid fa-pen-to-square"></i> Editar Produto</button>
         </div>
 
         <!-- Relatório por Cliente -->
         <div class="relatorio-cliente">
-          <h3>Relatório por Cliente</h3>
+          <h3><i class="fa-solid fa-user"></i> Relatório por Cliente</h3>
           <label for="cliente-relatorio-id">Cliente:</label>
           <select id="cliente-relatorio-id">
             <option value="">Selecione o Cliente</option>
           </select>
-          <button id="gerar-relatorio-cliente">Gerar Relatório</button>
+          <button id="gerar-relatorio-cliente"><i class="fa-solid fa-file-lines"></i> Gerar Relatório</button>
           <div id="resultado-cliente"></div>
         </div>
       </div>
