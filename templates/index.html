@@ -188,7 +188,7 @@
             <div class="relatorios">
                 <h2><i class="fa-solid fa-file-lines"></i> Relatórios</h2>
                 <!-- Relatório por Período -->
-                <div class="relatorio-periodo">
+                <div>
                     <h3><i class="fa-solid fa-calendar-days"></i> Relatório por Período</h3>
                     <label for="inicio">Início:</label>
                     <input type="date" id="inicio" />
@@ -198,7 +198,7 @@
                     <div id="resultado-periodo"></div>
                 </div>
                 <!-- Relatório por Vendedor -->
-                <div class="relatorio-vendedor">
+                <div>
                     <h3><i class="fa-solid fa-user-tie"></i> Relatório por Vendedor</h3>
                     <label for="vendedor-id">Vendedor:</label>
                     <input type="text" id="vendedor-id" placeholder="ID do Vendedor" />
@@ -206,21 +206,21 @@
                     <div id="resultado-vendedor"></div>
                 </div>
                 <!-- Relatório por Produto -->
-                <div class="relatorio-produto">
+                <div>
                     <h3><i class="fa-solid fa-box"></i> Relatório por Produto</h3>
                     <button id="gerar-relatorio-produto"><i class="fa-solid fa-file-lines"></i> Gerar Relatório</button>
                     <div id="resultado-produto"></div>
                 </div>
                 <!-- Relatório de Estoque Baixo -->
                 <div class="form-container">
-                    <h2><i class="fa-solid fa-triangle-exclamation"></i> Relatório de Estoque Baixo</h2>
+                    <h3><i class="fa-solid fa-triangle-exclamation"></i> Relatório de Estoque Baixo</h3>
                     <label for="low-stock-limit">Limite de Estoque:</label>
                     <input type="number" id="low-stock-limit" placeholder="Digite o limite de estoque" />
                     <button id="low-stock-button"><i class="fa-solid fa-file-lines"></i> Gerar Relatório</button>
                     <ul id="low-stock-list"></ul>
                 </div>
                 <!-- Relatório por Cliente -->
-                <div class="relatorio-cliente">
+                <div>
                     <h3><i class="fa-solid fa-user"></i> Relatório por Cliente</h3>
                     <label for="cliente-relatorio-id">Cliente:</label>
                     <select id="cliente-relatorio-id">
