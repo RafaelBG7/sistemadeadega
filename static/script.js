@@ -661,4 +661,49 @@ document.addEventListener('DOMContentLoaded', function () {
                 document.getElementById('resultado-cliente').innerHTML = `<p>Erro ao gerar relatório: ${error}</p>`;
             });
     });
+
+    // Exibir status de fidelidade do cliente selecionado
+    function mostrarStatusFidelidade(cliente) {
+        const fidelidadeDiv = document.getElementById('fidelidade-status');
+        if (!fidelidadeDiv) return;
+
+        if (!cliente) {
+            fidelidadeDiv.textContent = '';
+            return;
+        }
+
+        if (cliente.fidelidade_ativo) {
+            fidelidadeDiv.textContent = 'Desconto de 5% disponível para esta compra!';
+            fidelidadeDiv.style.color = 'green';
+        } else {
+            const falta = 100 - (cliente.fidelidade_credito || 0);
+            fidelidadeDiv.textContent = `Faltam R$${falta.toFixed(2)} em compras para ganhar 5% de desconto na próxima compra.`;
+            fidelidadeDiv.style.color = 'black';
+        }
+    }
+
+    // Atualizar status de fidelidade ao trocar o cliente
+    function atualizarStatusFidelidade() {
+        const select = document.getElementById('sales-client-id');
+        const clienteId = select.value;
+        if (!clienteId) {
+            mostrarStatusFidelidade(null);
+            return;
+        }
+        fetch('/clientes/listar')
+            .then(response => response.json())
+            .then(clientes => {
+                const cliente = clientes.find(c => c.id == clienteId);
+                mostrarStatusFidelidade(cliente);
+            });
+    }
+
+    // Adicione um div no HTML onde deseja mostrar o status, por exemplo:
+    // <div id="fidelidade-status"></div>
+
+    // Chame a função ao trocar o cliente
+    document.getElementById('sales-client-id').addEventListener('change', atualizarStatusFidelidade);
+
+    // Também chame após preencher os clientes
+    setTimeout(atualizarStatusFidelidade, 500); // Pequeno delay para garantir que o select foi preenchido
 });

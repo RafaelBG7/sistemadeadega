@@ -79,3 +79,5 @@ class Cliente(db.Model):
     data_nascimento = db.Column(db.Date, nullable=False)
     telefone = db.Column(db.String(20))
     email = db.Column(db.String(120), unique=True, nullable=False)
+    fidelidade_credito = db.Column(db.Float, default=0.0)  # NOVO
+    fidelidade_ativo = db.Column(db.Boolean, default=False)  # NOVO

@@ -23,7 +23,9 @@ def listar():
             'cpf': c.cpf,
             'data_nascimento': c.data_nascimento.strftime('%Y-%m-%d'),
             'telefone': c.telefone,
-            'email': c.email
+            'email': c.email,
+            'fidelidade_credito': c.fidelidade_credito,  # NOVO
+            'fidelidade_ativo': c.fidelidade_ativo      # NOVO
         }
         for c in clientes
     ]

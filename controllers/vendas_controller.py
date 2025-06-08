@@ -8,12 +8,14 @@ def realizar_venda(data):
     produtos = data['produtos']
     vendedor = Vendedor.query.get(data['vendedor_id'])
     forma_pagamento = data['forma_pagamento']
-    cliente_id = data.get('cliente_id')  # <-- NOVO
+    cliente_id = data.get('cliente_id')
+    cliente = Cliente.query.get(cliente_id) if cliente_id else None
 
     if not vendedor or not vendedor.ativo:
         return {'message': 'Vendedor não encontrado ou inativo'}, 404
 
     vendas = []
+    desconto_aplicado = False
     try:
         for item in produtos:
             produto_nome = item.get('produto_nome')
@@ -38,6 +40,14 @@ def realizar_venda(data):
             total_venda = produto.preco_venda * quantidade
             lucro = (produto.preco_venda - produto.preco_custo) * quantidade
 
+            # Fidelidade: aplicar desconto se houver
+            desconto = 0.0
+            if cliente and cliente.fidelidade_ativo and not desconto_aplicado:
+                desconto = total_venda * 0.05
+                total_venda -= desconto
+                cliente.fidelidade_ativo = False  # Desativa o desconto após uso
+                desconto_aplicado = True
+
             # Criar a venda
             venda = Venda(
                 produto_id=produto.id,
@@ -51,6 +61,16 @@ def realizar_venda(data):
             )
             vendas.append(venda)
             db.session.add(venda)
+
+        db.session.flush()  # Garante que as vendas estão na sessão
+
+        # Fidelidade: acumular crédito e ativar desconto se necessário
+        if cliente:
+            valor_gasto = sum(v.total_venda for v in vendas)
+            cliente.fidelidade_credito += valor_gasto
+            while cliente.fidelidade_credito >= 100:
+                cliente.fidelidade_credito -= 100
+                cliente.fidelidade_ativo = True  # Ativa desconto para próxima compra
 
         db.session.commit()
         print("Vendas realizadas com sucesso:", vendas)  # Log para depuração
