@@ -173,6 +173,59 @@ li button:hover {
     box-shadow: 0 2px 12px rgba(0,0,0,0.12);
 }
 
+/* Abas */
+.tabs {
+    display: flex;
+    border-bottom: 2px solid #8b0000;
+    margin-bottom: 24px;
+    gap: 0;
+}
+.tab-btn {
+    background: none;
+    border: none;
+    outline: none;
+    padding: 14px 28px;
+    font-size: 16px;
+    color: #8b0000;
+    font-weight: 600;
+    cursor: pointer;
+    border-radius: 14px 14px 0 0;
+    transition: background 0.2s, color 0.2s;
+}
+.tab-btn.active, .tab-btn:hover {
+    background: #fff;
+    color: #a40000;
+    border-bottom: 2px solid #fff;
+}
+.tab-content {
+    display: none;
+}
+.tab-content.active {
+    display: block;
+}
+
+.editar-produto form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.editar-produto .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.editar-produto label {
+    font-weight: 500;
+    color: #8b0000;
+}
+
+.editar-produto input {
+    width: 100%;
+    font-size: 15px;
+}
+
 @media (max-width: 900px) {
     .container {
         flex-direction: column;
@@ -192,4 +245,27 @@ li button:hover {
 ::-webkit-scrollbar-thumb {
     background: #d1bcbc;
     border-radius: 6px;
+}
+
+.form-container .button-group {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 12px;
+    flex-wrap: wrap;
+}
+
+.form-container .button-group button {
+    margin-top: 0;
+    flex: 1 1 auto;
+}
+
+.daily-summary-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #f6eaea;
+    padding: 8px 12px;
+    border-radius: 6px;
+    margin-bottom: 6px;
+    font-size: 15px;
 }

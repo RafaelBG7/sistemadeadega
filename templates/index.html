@@ -10,187 +10,243 @@
 <body>
     <div id="toast"></div>
     <h1><i class="fa-solid fa-wine-bottle"></i> Sistema de Adega</h1>
+    <div class="tabs">
+        <button class="tab-btn active" data-tab="tab-categorias"><i class="fa-solid fa-layer-group"></i> Categoria</button>
+        <button class="tab-btn" data-tab="tab-produtos"><i class="fa-solid fa-box"></i> Produto</button>
+        <button class="tab-btn" data-tab="tab-clientes"><i class="fa-solid fa-user"></i> Cliente</button>
+        <button class="tab-btn" data-tab="tab-vendedores"><i class="fa-solid fa-user-tie"></i> Vendedor</button>
+        <button class="tab-btn" data-tab="tab-realizar-venda"><i class="fa-solid fa-cart-shopping"></i> Realizar Venda</button>
+        <button class="tab-btn" data-tab="tab-vendas"><i class="fa-solid fa-chart-line"></i> Vendas</button>
+        <button class="tab-btn" data-tab="tab-caixa"><i class="fa-solid fa-vault"></i> Caixa</button>
+        <button class="tab-btn" data-tab="tab-relatorios"><i class="fa-solid fa-file-lines"></i> Relatórios</button>
+    </div>
+
     <div class="container">
         <!-- Categoria -->
-        <div class="form-container">
-            <h2><i class="fa-solid fa-layer-group"></i> Adicionar Categoria</h2>
-            <form id="category-form">
-                <input type="text" id="category-name" placeholder="Nome da Categoria" required>
-                <button type="submit"><i class="fa-solid fa-plus"></i> Adicionar</button>
-            </form>
-            <h2><i class="fa-solid fa-list"></i> Categorias</h2>
-            <ul id="category-list"></ul>
+        <div class="tab-content active" id="tab-categorias">
+            <div class="form-container">
+                <h2><i class="fa-solid fa-layer-group"></i> Adicionar Categoria</h2>
+                <form id="category-form">
+                    <input type="text" id="category-name" placeholder="Nome da Categoria" required>
+                    <button type="submit"><i class="fa-solid fa-plus"></i> Adicionar</button>
+                </form>
+                <h2><i class="fa-solid fa-list"></i> Categorias</h2>
+                <ul id="category-list"></ul>
+            </div>
         </div>
 
         <!-- Produto -->
-        <div class="form-container">
-            <h2><i class="fa-solid fa-box"></i> Adicionar Produto</h2>
-            <form id="product-form">
-                <input type="text" id="product-name" placeholder="Nome do Produto" required>
-                <input type="text" id="product-category" placeholder="Nome da Categoria" required>
-                <input type="hidden" id="product-category-id">
-                <input type="text" id="purchase-price" placeholder="Valor de Compra" required>
-                <input type="text" id="selling-price" placeholder="Valor de Venda" required>
-                <input type="number" id="product-quantity" placeholder="Quantidade" required>
-                <button type="submit"><i class="fa-solid fa-plus"></i> Adicionar</button>
-            </form>
-            <h2><i class="fa-solid fa-list"></i> Produtos</h2>
-            <ul id="product-list"></ul>
-        </div>
-
-        <!-- Vendas -->
-        <div class="form-container">
-            <h2><i class="fa-solid fa-cash-register"></i> Realizar Venda</h2>
-            <form id="sales-form">
-                <div id="products-container">
-                    <div class="product-item">
-                        <input type="text" class="product-name" placeholder="Nome do Produto" required>
-                        <input type="number" class="product-quantity" placeholder="Quantidade" required>
-                    </div>
-                </div>
-                <button type="button" id="add-product"><i class="fa-solid fa-plus"></i> Adicionar Produto</button>
-                <select id="payment-method" required>
-                    <option value="">Selecione a Forma de Pagamento</option>
-                    <option value="Dinheiro">Dinheiro</option>
-                    <option value="Pix">Pix</option>
-                    <option value="Débito">Débito</option>
-                    <option value="Crédito">Crédito</option>
-                </select>
-                <input type="text" id="sales-vendor-id" placeholder="ID do Vendedor" required>
-                <!-- NOVO: Seleção de cliente -->
-                <select id="sales-client-id">
-                    <option value="">Selecione o Cliente (opcional)</option>
-                </select>
-                <div id="fidelidade-status"></div>
-                <button type="submit"><i class="fa-solid fa-cart-shopping"></i> Realizar Venda</button>
-            </form>
-            <h2><i class="fa-solid fa-chart-line"></i> Relatório de Vendas</h2>
-            <ul id="sales-report"></ul>
-        </div>
-
-        <!-- Vendas Diárias -->
-        <div class="form-container">
-            <h2><i class="fa-solid fa-calendar-day"></i> Vendas Diárias</h2>
-            <button id="daily-sales-refresh"><i class="fa-solid fa-rotate"></i> Atualizar</button>
-            <ul id="daily-sales-summary">
-                <li><strong>Total de Vendas:</strong> R$<span id="daily-total-sales">0.00</span></li>
-                <li><strong>Lucro Total:</strong> R$<span id="daily-total-profit">0.00</span></li>
-                <li><strong>Formas de Pagamento:</strong></li>
-                <ul id="daily-payment-methods"></ul>
-            </ul>
-        </div>
-
-        <!-- Controle de Caixa -->
-        <div class="form-container">
-            <h2><i class="fa-solid fa-vault"></i> Controle de Caixa</h2>
-            <button id="open-cash-register"><i class="fa-solid fa-door-open"></i> Abrir Caixa</button>
-            <button id="close-cash-register" disabled><i class="fa-solid fa-door-closed"></i> Fechar Caixa</button>
-            <button id="refresh-cash-register"><i class="fa-solid fa-rotate"></i> Atualizar Caixa</button> <!-- Novo botão -->
-            <div id="cash-register-status">
-                <p><strong>Status do Caixa:</strong> <span id="cash-register-state">Fechado</span></p>
+        <div class="tab-content" id="tab-produtos">
+            <div class="form-container">
+                <h2><i class="fa-solid fa-box"></i> Adicionar Produto</h2>
+                <form id="product-form">
+                    <input type="text" id="product-name" placeholder="Nome do Produto" required>
+                    <input type="text" id="product-category" placeholder="Nome da Categoria" required>
+                    <input type="hidden" id="product-category-id">
+                    <input type="text" id="purchase-price" placeholder="Valor de Compra" required>
+                    <input type="text" id="selling-price" placeholder="Valor de Venda" required>
+                    <input type="number" id="product-quantity" placeholder="Quantidade" required>
+                    <button type="submit"><i class="fa-solid fa-plus"></i> Adicionar</button>
+                </form>
+                <h2><i class="fa-solid fa-list"></i> Produtos</h2>
+                <ul id="product-list"></ul>
             </div>
-            <h3>Total Vendido no Dia</h3>
-            <p>R$ <span id="total-sold-today">0.00</span></p>
-            <h3>Lucro Diário</h3>
-            <p>R$ <span id="daily-profit">0.00</span></p>
-        </div>
-
-        <!-- Vendedor -->
-        <div class="form-container">
-            <h2><i class="fa-solid fa-user-tie"></i> Adicionar Vendedor</h2>
-            <form id="vendor-form">
-                <input type="text" id="vendor-name" placeholder="Nome do Vendedor" required>
-                <input type="email" id="vendor-email" placeholder="Email do Vendedor" required>
-                <input type="text" id="vendor-phone" placeholder="Telefone do Vendedor">
-                <button type="submit"><i class="fa-solid fa-plus"></i> Adicionar</button>
-            </form>
-            <h2><i class="fa-solid fa-users"></i> Vendedores</h2>
-            <ul id="vendor-list"></ul>
+            <div class="form-container editar-produto">
+                <h3><i class="fa-solid fa-pen-to-square"></i> Editar Produto</h3>
+                <form id="edit-product-form">
+                    <div class="form-group">
+                        <label for="edit-product-id">ID do Produto:</label>
+                        <input type="number" id="edit-product-id" placeholder="Digite o ID do Produto" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="edit-product-name">Nome do Produto:</label>
+                        <input type="text" id="edit-product-name" placeholder="Digite o Nome do Produto" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="edit-product-category-id">ID da Categoria:</label>
+                        <input type="number" id="edit-product-category-id" placeholder="Digite o ID da Categoria" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="edit-purchase-price">Preço de Custo:</label>
+                        <input type="number" step="0.01" id="edit-purchase-price" placeholder="Digite o Preço de Custo" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="edit-selling-price">Preço de Venda:</label>
+                        <input type="number" step="0.01" id="edit-selling-price" placeholder="Digite o Preço de Venda" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="edit-product-quantity">Quantidade:</label>
+                        <input type="number" id="edit-product-quantity" placeholder="Digite a Quantidade" required />
+                    </div>
+                    <button id="edit-product-button" type="submit"><i class="fa-solid fa-pen-to-square"></i> Editar Produto</button>
+                </form>
+            </div>
         </div>
 
         <!-- Cliente -->
-        <div class="form-container">
-            <h2><i class="fa-solid fa-user-plus"></i> Cadastrar Cliente</h2>
-            <form id="client-form">
-                <input type="text" id="client-name" placeholder="Nome do Cliente" required>
-                <input type="text" id="client-cpf" placeholder="CPF" required>
-                <input type="date" id="client-birthdate" placeholder="Data de Nascimento" required>
-                <input type="text" id="client-phone" placeholder="Telefone">
-                <input type="email" id="client-email" placeholder="Email" required>
-                <button type="submit"><i class="fa-solid fa-plus"></i> Cadastrar</button>
-            </form>
-            <h2><i class="fa-solid fa-users"></i> Clientes</h2>
-            <ul id="client-list"></ul>
+        <div class="tab-content" id="tab-clientes">
+            <div class="form-container">
+                <h2><i class="fa-solid fa-user-plus"></i> Cadastrar Cliente</h2>
+                <form id="client-form">
+                    <input type="text" id="client-name" placeholder="Nome do Cliente" required>
+                    <input type="text" id="client-cpf" placeholder="CPF" required>
+                    <input type="date" id="client-birthdate" placeholder="Data de Nascimento" required>
+                    <input type="text" id="client-phone" placeholder="Telefone">
+                    <input type="email" id="client-email" placeholder="Email" required>
+                    <button type="submit"><i class="fa-solid fa-plus"></i> Cadastrar</button>
+                </form>
+                <h2><i class="fa-solid fa-users"></i> Clientes</h2>
+                <ul id="client-list"></ul>
+            </div>
+        </div>
+
+        <!-- Vendedor -->
+        <div class="tab-content" id="tab-vendedores">
+            <div class="form-container">
+                <h2><i class="fa-solid fa-user-tie"></i> Adicionar Vendedor</h2>
+                <form id="vendor-form">
+                    <input type="text" id="vendor-name" placeholder="Nome do Vendedor" required>
+                    <input type="email" id="vendor-email" placeholder="Email do Vendedor" required>
+                    <input type="text" id="vendor-phone" placeholder="Telefone do Vendedor">
+                    <button type="submit"><i class="fa-solid fa-plus"></i> Adicionar</button>
+                </form>
+                <h2><i class="fa-solid fa-users"></i> Vendedores</h2>
+                <ul id="vendor-list"></ul>
+            </div>
+        </div>
+
+        <!-- Realizar Venda -->
+        <div class="tab-content" id="tab-realizar-venda">
+            <div class="form-container">
+                <h2><i class="fa-solid fa-cash-register"></i> Realizar Venda</h2>
+                <form id="sales-form">
+                    <div id="products-container">
+                        <div class="product-item">
+                            <input type="text" class="product-name" placeholder="Nome do Produto" required>
+                            <input type="number" class="product-quantity" placeholder="Quantidade" required>
+                        </div>
+                    </div>
+                    <button type="button" id="add-product"><i class="fa-solid fa-plus"></i> Adicionar Produto</button>
+                    <select id="payment-method" required>
+                        <option value="">Selecione a Forma de Pagamento</option>
+                        <option value="Dinheiro">Dinheiro</option>
+                        <option value="Pix">Pix</option>
+                        <option value="Débito">Débito</option>
+                        <option value="Crédito">Crédito</option>
+                    </select>
+                    <input type="text" id="sales-vendor-id" placeholder="ID do Vendedor" required>
+                    <select id="sales-client-id">
+                        <option value="">Selecione o Cliente (opcional)</option>
+                    </select>
+                    <div id="fidelidade-status"></div>
+                    <button type="submit"><i class="fa-solid fa-cart-shopping"></i> Realizar Venda</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Vendas (Relatório de Vendas) -->
+        <div class="tab-content" id="tab-vendas">
+            <div class="form-container">
+                <h2><i class="fa-solid fa-chart-line"></i> Relatório de Vendas</h2>
+                <ul id="sales-report"></ul>
+            </div>
+        </div>
+
+        <!-- Caixa -->
+        <div class="tab-content" id="tab-caixa">
+            <div class="form-container">
+                <h2><i class="fa-solid fa-vault"></i> Controle de Caixa</h2>
+                <div class="button-group">
+                    <button id="open-cash-register"><i class="fa-solid fa-door-open"></i> Abrir Caixa</button>
+                    <button id="close-cash-register" disabled><i class="fa-solid fa-door-closed"></i> Fechar Caixa</button>
+                    <button id="refresh-cash-register"><i class="fa-solid fa-rotate"></i> Atualizar Caixa</button>
+                </div>
+                <div id="cash-register-status">
+                    <p><strong>Status do Caixa:</strong> <span id="cash-register-state">Fechado</span></p>
+                </div>
+                <h3>Total Vendido no Dia</h3>
+                <p>R$ <span id="total-sold-today">0.00</span></p>
+                <h3>Lucro Diário</h3>
+                <p>R$ <span id="daily-profit">0.00</span></p>
+            </div>
+            <div class="form-container">
+                <h2><i class="fa-solid fa-calendar-day"></i> Vendas Diárias</h2>
+                <div class="button-group">
+                    <button id="daily-sales-refresh"><i class="fa-solid fa-rotate"></i> Atualizar</button>
+                </div>
+                <ul id="daily-sales-summary">
+                    <li class="daily-summary-row"><strong>Total de Vendas:</strong> <span>R$ <span id="daily-total-sales">0.00</span></span></li>
+                    <li class="daily-summary-row"><strong>Lucro Total:</strong> <span>R$ <span id="daily-total-profit">0.00</span></span></li>
+                    <li class="daily-summary-row"><strong>Formas de Pagamento:</strong></li>
+                    <ul id="daily-payment-methods"></ul>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Relatórios Extras -->
+        <div class="tab-content" id="tab-relatorios">
+            <div class="relatorios">
+                <h2><i class="fa-solid fa-file-lines"></i> Relatórios</h2>
+                <!-- Relatório por Período -->
+                <div class="relatorio-periodo">
+                    <h3><i class="fa-solid fa-calendar-days"></i> Relatório por Período</h3>
+                    <label for="inicio">Início:</label>
+                    <input type="date" id="inicio" />
+                    <label for="fim">Fim:</label>
+                    <input type="date" id="fim" />
+                    <button id="gerar-relatorio-periodo"><i class="fa-solid fa-file-lines"></i> Gerar Relatório</button>
+                    <div id="resultado-periodo"></div>
+                </div>
+                <!-- Relatório por Vendedor -->
+                <div class="relatorio-vendedor">
+                    <h3><i class="fa-solid fa-user-tie"></i> Relatório por Vendedor</h3>
+                    <label for="vendedor-id">Vendedor:</label>
+                    <input type="text" id="vendedor-id" placeholder="ID do Vendedor" />
+                    <button id="gerar-relatorio-vendedor"><i class="fa-solid fa-file-lines"></i> Gerar Relatório</button>
+                    <div id="resultado-vendedor"></div>
+                </div>
+                <!-- Relatório por Produto -->
+                <div class="relatorio-produto">
+                    <h3><i class="fa-solid fa-box"></i> Relatório por Produto</h3>
+                    <button id="gerar-relatorio-produto"><i class="fa-solid fa-file-lines"></i> Gerar Relatório</button>
+                    <div id="resultado-produto"></div>
+                </div>
+                <!-- Relatório de Estoque Baixo -->
+                <div class="form-container">
+                    <h2><i class="fa-solid fa-triangle-exclamation"></i> Relatório de Estoque Baixo</h2>
+                    <label for="low-stock-limit">Limite de Estoque:</label>
+                    <input type="number" id="low-stock-limit" placeholder="Digite o limite de estoque" />
+                    <button id="low-stock-button"><i class="fa-solid fa-file-lines"></i> Gerar Relatório</button>
+                    <ul id="low-stock-list"></ul>
+                </div>
+                <!-- Relatório por Cliente -->
+                <div class="relatorio-cliente">
+                    <h3><i class="fa-solid fa-user"></i> Relatório por Cliente</h3>
+                    <label for="cliente-relatorio-id">Cliente:</label>
+                    <select id="cliente-relatorio-id">
+                        <option value="">Selecione o Cliente</option>
+                    </select>
+                    <button id="gerar-relatorio-cliente"><i class="fa-solid fa-file-lines"></i> Gerar Relatório</button>
+                    <div id="resultado-cliente"></div>
+                </div>
+            </div>
         </div>
     </div>
     <script src="{{ url_for('static', filename='script.js') }}"></script>
-    <div class="relatorios">
-        <h2><i class="fa-solid fa-file-lines"></i> Relatórios</h2>
-      
-        <!-- Relatório por Período -->
-        <div class="relatorio-periodo">
-            <h3><i class="fa-solid fa-calendar-days"></i> Relatório por Período</h3>
-            <label for="inicio">Início:</label>
-            <input type="date" id="inicio" />
-            <label for="fim">Fim:</label>
-            <input type="date" id="fim" />
-            <button id="gerar-relatorio-periodo"><i class="fa-solid fa-file-lines"></i> Gerar Relatório</button>
-            <div id="resultado-periodo"></div>
-          </div>
-      
-        <!-- Relatório por Vendedor -->
-        <div class="relatorio-vendedor">
-          <h3><i class="fa-solid fa-user-tie"></i> Relatório por Vendedor</h3>
-          <label for="vendedor-id">Vendedor:</label>
-          <input type="text" id="vendedor-id" placeholder="ID do Vendedor" />
-          <button id="gerar-relatorio-vendedor"><i class="fa-solid fa-file-lines"></i> Gerar Relatório</button>
-          <div id="resultado-vendedor"></div>
-        </div>
-      
-        <!-- Relatório por Produto -->
-        <div class="relatorio-produto">
-          <h3><i class="fa-solid fa-box"></i> Relatório por Produto</h3>
-          <button id="gerar-relatorio-produto"><i class="fa-solid fa-file-lines"></i> Gerar Relatório</button>
-          <div id="resultado-produto"></div>
-        </div>
-
-        <!-- Relatório de Estoque Baixo -->
-        <div class="form-container">
-            <h2><i class="fa-solid fa-triangle-exclamation"></i> Relatório de Estoque Baixo</h2>
-            <label for="low-stock-limit">Limite de Estoque:</label>
-            <input type="number" id="low-stock-limit" placeholder="Digite o limite de estoque" />
-            <button id="low-stock-button"><i class="fa-solid fa-file-lines"></i> Gerar Relatório</button>
-            <ul id="low-stock-list"></ul>
-        </div>
-
-        <!-- Editar Produto -->
-        <div class="editar-produto">
-            <h3><i class="fa-solid fa-pen-to-square"></i> Editar Produto</h3>
-            <label for="edit-product-id">ID do Produto:</label>
-            <input type="number" id="edit-product-id" placeholder="Digite o ID do Produto" />
-            <label for="edit-product-name">Nome do Produto:</label>
-            <input type="text" id="edit-product-name" placeholder="Digite o Nome do Produto" />
-            <label for="edit-product-category-id">ID da Categoria:</label>
-            <input type="number" id="edit-product-category-id" placeholder="Digite o ID da Categoria" />
-            <label for="edit-purchase-price">Preço de Custo:</label>
-            <input type="number" step="0.01" id="edit-purchase-price" placeholder="Digite o Preço de Custo" />
-            <label for="edit-selling-price">Preço de Venda:</label>
-            <input type="number" step="0.01" id="edit-selling-price" placeholder="Digite o Preço de Venda" />
-            <label for="edit-product-quantity">Quantidade:</label>
-            <input type="number" id="edit-product-quantity" placeholder="Digite a Quantidade" />
-            <button id="edit-product-button"><i class="fa-solid fa-pen-to-square"></i> Editar Produto</button>
-        </div>
-
-        <!-- Relatório por Cliente -->
-        <div class="relatorio-cliente">
-          <h3><i class="fa-solid fa-user"></i> Relatório por Cliente</h3>
-          <label for="cliente-relatorio-id">Cliente:</label>
-          <select id="cliente-relatorio-id">
-            <option value="">Selecione o Cliente</option>
-          </select>
-          <button id="gerar-relatorio-cliente"><i class="fa-solid fa-file-lines"></i> Gerar Relatório</button>
-          <div id="resultado-cliente"></div>
-        </div>
-      </div>
+    <script>
+    // Tabs JS
+    document.addEventListener('DOMContentLoaded', function () {
+        const tabBtns = document.querySelectorAll('.tab-btn');
+        const tabContents = document.querySelectorAll('.tab-content');
+        tabBtns.forEach(btn => {
+            btn.addEventListener('click', function () {
+                tabBtns.forEach(b => b.classList.remove('active'));
+                tabContents.forEach(tc => tc.classList.remove('active'));
+                btn.classList.add('active');
+                document.getElementById(btn.dataset.tab).classList.add('active');
+            });
+        });
+    });
+    </script>
 </body>
 </html>

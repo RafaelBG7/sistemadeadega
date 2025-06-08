@@ -61,7 +61,8 @@ document.addEventListener('DOMContentLoaded', function () {
         })
             .then(response => response.json())
             .then(data => {
-                showToast(data.message || 'Venda realizada com sucesso!');
+                console.log(data); 
+                alert(data.message || 'Venda realizada com sucesso!');
                 atualizarRelatorio();
             })
             .catch(error => console.error('Erro ao realizar venda:', error));
@@ -99,7 +100,7 @@ document.addEventListener('DOMContentLoaded', function () {
         })
             .then(response => response.json())
             .then(data => {
-                showToast(data.message || 'Categoria adicionada com sucesso!');
+                alert(data.message || 'Categoria adicionada com sucesso!');
                 listarCategorias();
             })
             .catch(error => console.error('Erro ao adicionar categoria:', error));
@@ -180,7 +181,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const quantity = parseInt(document.getElementById('product-quantity').value, 10);
 
         if (!categoryId) {
-            showToast('Por favor, selecione uma categoria válida!');
+            alert('Por favor, selecione uma categoria válida!');
             return;
         }
 
@@ -269,7 +270,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     return response.json();
                 })
                 .then(data => {
-                    showToast(data.message || 'Produto removido com sucesso!');
+                    alert(data.message || 'Produto removido com sucesso!');
                     listarProdutos(); // Atualizar a lista de produtos
                 })
                 .catch(error => console.error('Erro ao remover produto:', error));
@@ -289,7 +290,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const quantity = parseInt(document.getElementById('edit-product-quantity').value, 10);
 
         if (!produtoId || isNaN(produtoId)) {
-            showToast('Por favor, insira um ID de produto válido.');
+            alert('Por favor, insira um ID de produto válido.');
             return;
         }
 
@@ -315,7 +316,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 return response.json();
             })
             .then(data => {
-                showToast(data.message || 'Produto editado com sucesso!');
+                alert(data.message || 'Produto editado com sucesso!');
                 listarProdutos(); // Atualizar a lista de produtos
             })
             .catch(error => console.error('Erro ao editar produto:', error));
@@ -345,7 +346,7 @@ document.addEventListener('DOMContentLoaded', function () {
         })
             .then(response => response.json())
             .then(data => {
-                showToast(data.message || 'Vendedor cadastrado com sucesso!');
+                alert(data.message || 'Vendedor cadastrado com sucesso!');
                 listarVendedores();
             })
             .catch(error => console.error('Erro ao cadastrar vendedor:', error));
@@ -444,7 +445,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 return response.json();
             })
             .then(data => {
-                showToast(data.message || 'Caixa aberto com sucesso!');
+                alert(data.message || 'Caixa aberto com sucesso!');
                 atualizarStatusCaixa(); // Atualizar o status do caixa
             })
             .catch(error => console.error('Erro ao abrir o caixa:', error));
@@ -461,7 +462,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     return response.json();
                 })
                 .then(data => {
-                    showToast(data.message || 'Caixa fechado com sucesso!');
+                    alert(data.message || 'Caixa fechado com sucesso!');
                     atualizarStatusCaixa(); // Atualizar o status do caixa
                 })
                 .catch(error => console.error('Erro ao fechar o caixa:', error));
@@ -526,7 +527,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const limite = parseInt(limiteInput.value, 10);
 
         if (isNaN(limite) || limite <= 0) {
-            showToast('Por favor, insira um número válido para o limite de estoque.');
+            alert('Por favor, insira um número válido para o limite de estoque.');
             return;
         }
 
@@ -581,7 +582,7 @@ document.addEventListener('DOMContentLoaded', function () {
         })
             .then(response => response.json())
             .then(data => {
-                showToast(data.message || 'Cliente cadastrado com sucesso!');
+                alert(data.message || 'Cliente cadastrado com sucesso!');
                 listarClientes();
             })
             .catch(error => console.error('Erro ao cadastrar cliente:', error));
@@ -627,7 +628,7 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('gerar-relatorio-cliente').addEventListener('click', function () {
         const clienteId = document.getElementById('cliente-relatorio-id').value;
         if (!clienteId) {
-            showToast('Selecione um cliente!');
+            alert('Selecione um cliente!');
             return;
         }
         fetch(`/relatorios/cliente?cliente_id=${clienteId}`)
