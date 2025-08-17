@@ -10,6 +10,7 @@ from routes.caixa import caixa_bp
 from routes.home import home_bp
 from routes.relatorios import relatorios_bp
 from routes.clientes import clientes_bp
+from routes.fornecedores import fornecedores_bp
 
 def create_app():
     app = Flask(__name__, static_folder='static', template_folder='templates')
@@ -34,10 +35,15 @@ def create_app():
     app.register_blueprint(caixa_bp, url_prefix='/caixa')
     app.register_blueprint(relatorios_bp, url_prefix='/relatorios')
     app.register_blueprint(clientes_bp, url_prefix='/clientes')
+    app.register_blueprint(fornecedores_bp, url_prefix='/fornecedores')
 
     @app.route('/index')
     def index():
         return render_template('index.html')
+
+    @app.route('/fornecedores')
+    def fornecedores_page():
+        return render_template('fornecedores.html')
 
 
     return app

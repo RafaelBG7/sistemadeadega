@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Fornecedores</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div id="toast"></div>
+    <h1><i class="fa-solid fa-wine-bottle"></i> Sistema de Adega</h1>
+    <div class="tabs">
+        <a href="/index" class="tab-btn"><i class="fa-solid fa-layer-group"></i> Categoria</a>
+        <a href="/index" class="tab-btn"><i class="fa-solid fa-box"></i> Produto</a>
+        <a href="/index" class="tab-btn"><i class="fa-solid fa-user"></i> Cliente</a>
+        <a href="/index" class="tab-btn"><i class="fa-solid fa-user-tie"></i> Vendedor</a>
+        <a href="/index" class="tab-btn"><i class="fa-solid fa-cart-shopping"></i> Realizar Venda</a>
+        <a href="/index" class="tab-btn"><i class="fa-solid fa-chart-line"></i> Vendas</a>
+        <a href="/index" class="tab-btn"><i class="fa-solid fa-vault"></i> Caixa</a>
+        <a href="/index" class="tab-btn"><i class="fa-solid fa-file-lines"></i> Relatórios</a>
+        <a href="/fornecedores" class="tab-btn active"><i class="fa-solid fa-truck"></i> Fornecedores</a>
+    </div>
+    <div class="container">
+        <h1>Fornecedores</h1>
+        <div class="form-container">
+            <form id="form-fornecedor">
+                <input type="text" name="nome" placeholder="Nome" required>
+                <input type="text" name="cnpj" placeholder="CNPJ">
+                <input type="text" name="telefone" placeholder="Telefone">
+                <input type="email" name="email" placeholder="Email">
+                <input type="text" name="endereco" placeholder="Endereço">
+                <button type="submit">Adicionar Fornecedor</button>
+            </form>
+        </div>
+        <div class="form-container">
+            <h2>Lista de Fornecedores</h2>
+            <ul id="lista-fornecedores"></ul>
+        </div>
+    </div>
+    <script>
+    async function carregarFornecedores() {
+        const resp = await fetch('/fornecedores/');
+        const fornecedores = await resp.json();
+        const lista = document.getElementById('lista-fornecedores');
+        lista.innerHTML = '';
+        fornecedores.forEach(f => {
+            const li = document.createElement('li');
+            li.innerHTML = `
+                <span>${f.nome} - ${f.cnpj} - ${f.telefone}</span>
+                <span>
+                    <button class="edit-btn" title="Editar" onclick="editarFornecedor(${f.id}, '${f.nome}', '${f.cnpj}', '${f.telefone}', '${f.email}', '${f.endereco}')"><i class='fa fa-pen'></i></button>
+                    <button class="remove-btn" title="Remover" onclick="removerFornecedor(${f.id})"><i class='fa fa-trash'></i></button>
+                </span>
+            `;
+            lista.appendChild(li);
+        });
+    }
+
+    document.getElementById('form-fornecedor').onsubmit = async function(e) {
+        e.preventDefault();
+        const form = e.target;
+        const data = Object.fromEntries(new FormData(form));
+        if (form.dataset.editando) {
+            // Editar fornecedor existente
+            const id = form.dataset.editando;
+            await fetch(`/fornecedores/${id}`, {
+                method: 'PUT',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(data)
+            });
+            delete form.dataset.editando;
+            form.querySelector('button[type="submit"]').textContent = 'Adicionar Fornecedor';
+        } else {
+            // Adicionar novo fornecedor
+            await fetch('/fornecedores/', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(data)
+            });
+        }
+        form.reset();
+        carregarFornecedores();
+    };
+
+    window.editarFornecedor = function(id, nome, cnpj, telefone, email, endereco) {
+        const form = document.getElementById('form-fornecedor');
+        form.nome.value = nome;
+        form.cnpj.value = cnpj;
+        form.telefone.value = telefone;
+        form.email.value = email;
+        form.endereco.value = endereco;
+        form.dataset.editando = id;
+        form.querySelector('button[type="submit"]').textContent = 'Salvar Alterações';
+        form.scrollIntoView({behavior: 'smooth'});
+    }
+
+    window.removerFornecedor = async function(id) {
+        if (confirm('Tem certeza que deseja remover este fornecedor?')) {
+            await fetch(`/fornecedores/${id}`, { method: 'DELETE' });
+            carregarFornecedores();
+        }
+    }
+
+    carregarFornecedores();
+    </script>
+</body>
+</html>
