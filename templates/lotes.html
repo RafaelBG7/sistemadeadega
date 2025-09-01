@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Lotes e Validade</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <h1><i class="fa-solid fa-boxes-stacked"></i> Controle de Lotes e Validade</h1>
+    <div class="tabs">
+        <a href="/index" class="tab-btn"><i class="fa-solid fa-layer-group"></i> Categoria</a>
+        <a href="/index" class="tab-btn"><i class="fa-solid fa-box"></i> Produto</a>
+        <a href="/index" class="tab-btn"><i class="fa-solid fa-user"></i> Cliente</a>
+        <a href="/index" class="tab-btn"><i class="fa-solid fa-user-tie"></i> Vendedor</a>
+        <a href="/index" class="tab-btn"><i class="fa-solid fa-cart-shopping"></i> Realizar Venda</a>
+        <a href="/index" class="tab-btn"><i class="fa-solid fa-chart-line"></i> Vendas</a>
+        <a href="/index" class="tab-btn"><i class="fa-solid fa-vault"></i> Caixa</a>
+        <a href="/index" class="tab-btn"><i class="fa-solid fa-file-lines"></i> Relatórios</a>
+        <a href="/fornecedores" class="tab-btn"><i class="fa-solid fa-truck"></i> Fornecedores</a>
+        <a href="/lotes" class="tab-btn active"><i class="fa-solid fa-boxes-stacked"></i> Lotes</a>
+    </div>
+    <div class="container">
+        <h2>Cadastrar Lote</h2>
+        <form id="form-lote">
+            <select name="produto_id" required>
+                <option value="">Selecione o produto</option>
+                {% for produto in produtos %}
+                <option value="{{ produto.id }}">{{ produto.produto }}</option>
+                {% endfor %}
+            </select>
+            <input type="text" name="numero_lote" placeholder="Número do Lote" required>
+            <input type="date" name="validade" required>
+            <input type="number" name="quantidade" placeholder="Quantidade" min="1" required>
+            <button type="submit">Adicionar Lote</button>
+        </form>
+        <h2>Lotes Cadastrados</h2>
+        <ul id="lista-lotes"></ul>
+    </div>
+    <script>
+    async function carregarLotes() {
+        const resp = await fetch('/lotes/');
+        const lotes = await resp.json();
+        const lista = document.getElementById('lista-lotes');
+        lista.innerHTML = '';
+        lotes.forEach(lote => {
+            const hoje = new Date();
+            const validade = new Date(lote.validade);
+            let alerta = '';
+            const diasRestantes = Math.ceil((validade - hoje) / (1000*60*60*24));
+            if (validade < hoje) {
+                alerta = '<span style="color:red;">(Vencido)</span>';
+            } else if (diasRestantes <= 5) {
+                alerta = '<span style="color:orange;">(Vence em ' + diasRestantes + ' dias)</span>';
+            }
+            lista.innerHTML += `
+                <li>
+                    <b>${lote.produto}</b> | Lote: ${lote.numero_lote} | Validade: ${lote.validade} ${alerta} | Qtde: ${lote.quantidade}
+                    <button onclick="editarLote(${lote.id}, '${lote.produto_id}', '${lote.numero_lote}', '${lote.validade}', ${lote.quantidade})"><i class="fa fa-edit"></i></button>
+                    <button onclick="removerLote(${lote.id})"><i class="fa fa-trash"></i></button>
+                </li>
+            `;
+        });
+    }
+
+    document.getElementById('form-lote').onsubmit = async function(e) {
+        e.preventDefault();
+        const form = e.target;
+        const data = Object.fromEntries(new FormData(form));
+        if (form.dataset.editando) {
+            const id = form.dataset.editando;
+            await fetch(`/lotes/${id}`, {
+                method: 'PUT',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(data)
+            });
+            delete form.dataset.editando;
+            form.querySelector('button[type="submit"]').textContent = 'Adicionar Lote';
+        } else {
+            await fetch('/lotes/', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(data)
+            });
+        }
+        form.reset();
+        carregarLotes();
+    };
+
+    window.editarLote = function(id, produto_id, numero_lote, validade, quantidade) {
+        const form = document.getElementById('form-lote');
+        form.produto_id.value = produto_id;
+        form.numero_lote.value = numero_lote;
+        form.validade.value = validade;
+        form.quantidade.value = quantidade;
+        form.dataset.editando = id;
+        form.querySelector('button[type="submit"]').textContent = 'Salvar Alterações';
+        form.scrollIntoView({behavior: 'smooth'});
+    }
+
+    window.removerLote = async function(id) {
+        if (confirm('Tem certeza que deseja remover este lote?')) {
+            await fetch(`/lotes/${id}`, {method: 'DELETE'});
+            carregarLotes();
+        }
+    }
+
+    carregarLotes();
+    </script>
+</body>
+</html>

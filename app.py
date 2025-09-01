@@ -11,6 +11,7 @@ from routes.home import home_bp
 from routes.relatorios import relatorios_bp
 from routes.clientes import clientes_bp
 from routes.fornecedores import fornecedores_bp
+from routes.lotes import lotes_bp
 
 def create_app():
     app = Flask(__name__, static_folder='static', template_folder='templates')
@@ -36,6 +37,7 @@ def create_app():
     app.register_blueprint(relatorios_bp, url_prefix='/relatorios')
     app.register_blueprint(clientes_bp, url_prefix='/clientes')
     app.register_blueprint(fornecedores_bp, url_prefix='/fornecedores')
+    app.register_blueprint(lotes_bp, url_prefix='/lotes')
 
     @app.route('/index')
     def index():
@@ -45,6 +47,11 @@ def create_app():
     def fornecedores_page():
         return render_template('fornecedores.html')
 
+    @app.route('/lotes')
+    def lotes_page():
+        from models.models_adega import Produto
+        produtos = Produto.query.all()
+        return render_template('lotes.html', produtos=produtos)
 
     return app
 
