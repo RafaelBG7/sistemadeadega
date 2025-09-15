@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Contas a Pagar</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <h1><i class="fa-solid fa-money-bill-wave"></i> Contas a Pagar</h1>
+    <div class="tabs">
+        <a href="/index" class="tab-btn"><i class="fa-solid fa-layer-group"></i> Categoria</a>
+        <a href="/index" class="tab-btn"><i class="fa-solid fa-box"></i> Produto</a>
+        <a href="/index" class="tab-btn"><i class="fa-solid fa-user"></i> Cliente</a>
+        <a href="/index" class="tab-btn"><i class="fa-solid fa-user-tie"></i> Vendedor</a>
+        <a href="/index" class="tab-btn"><i class="fa-solid fa-cart-shopping"></i> Realizar Venda</a>
+        <a href="/index" class="tab-btn"><i class="fa-solid fa-chart-line"></i> Vendas</a>
+        <a href="/index" class="tab-btn"><i class="fa-solid fa-vault"></i> Caixa</a>
+        <a href="/index" class="tab-btn"><i class="fa-solid fa-file-lines"></i> Relatórios</a>
+        <a href="/fornecedores" class="tab-btn active"><i class="fa-solid fa-truck"></i> Fornecedores</a>
+        <a href="/lotes" class="tab-btn"><i class="fa-solid fa-boxes-stacked"></i> Lotes</a>
+        <a href="/contas_pagar/pagina" class="tab-btn"><i class="fa-solid fa-money-bill-wave"></i> Contas a Pagar</a>
+    </div>
+    <div class="container">
+        <h2>Adicionar Conta</h2>
+        <form id="form-conta">
+            <input type="text" name="descricao" placeholder="Descrição" required>
+            <input type="number" name="valor" placeholder="Valor" step="0.01" required>
+            <input type="date" name="vencimento" required>
+            <select name="status">
+                <option value="Pendente">Pendente</option>
+                <option value="Pago">Pago</option>
+            </select>
+            <button type="submit">Adicionar Conta</button>
+        </form>
+        <h2>Contas Cadastradas</h2>
+        <ul id="lista-contas"></ul>
+    </div>
+    <script>
+    async function carregarContas() {
+        const resp = await fetch('/contas_pagar/');
+        const contas = await resp.json();
+        const lista = document.getElementById('lista-contas');
+        lista.innerHTML = '';
+        contas.forEach(conta => {
+            let statusColor = conta.status === 'Pago' ? 'green' : 'orange';
+            let alerta = '';
+            const hoje = new Date();
+            const vencimento = new Date(conta.vencimento);
+            const diasRestantes = Math.ceil((vencimento - hoje) / (1000*60*60*24));
+            if (conta.status === 'Pendente' && diasRestantes <= 5 && diasRestantes >= 0) {
+                alerta = `<span style="color:red;">(Vence em ${diasRestantes} dias!)</span>`;
+            }
+            lista.innerHTML += `
+                <li>
+                    <b>${conta.descricao}</b> | Valor: R$ ${conta.valor.toFixed(2)} | Vencimento: ${conta.vencimento} 
+                    ${alerta} | <span style="color:${statusColor};">${conta.status}</span>
+                    <button onclick="editarConta(${conta.id}, '${conta.descricao}', ${conta.valor}, '${conta.vencimento}', '${conta.status}')"><i class="fa fa-edit"></i></button>
+                    <button onclick="removerConta(${conta.id})"><i class="fa fa-trash"></i></button>
+                </li>
+            `;
+        });
+    }
+
+    document.getElementById('form-conta').onsubmit = async function(e) {
+        e.preventDefault();
+        const form = e.target;
+        const data = Object.fromEntries(new FormData(form));
+        data.valor = parseFloat(data.valor);
+        if (form.dataset.editando) {
+            const id = form.dataset.editando;
+            await fetch(`/contas_pagar/${id}`, {
+                method: 'PUT',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(data)
+            });
+            delete form.dataset.editando;
+            form.querySelector('button[type="submit"]').textContent = 'Adicionar Conta';
+        } else {
+            await fetch('/contas_pagar/', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(data)
+            });
+        }
+        form.reset();
+        carregarContas();
+    };
+
+    window.editarConta = function(id, descricao, valor, vencimento, status) {
+        const form = document.getElementById('form-conta');
+        form.descricao.value = descricao;
+        form.valor.value = valor;
+        form.vencimento.value = vencimento;
+        form.status.value = status;
+        form.dataset.editando = id;
+        form.querySelector('button[type="submit"]').textContent = 'Salvar Alterações';
+        form.scrollIntoView({behavior: 'smooth'});
+    }
+
+    window.removerConta = async function(id) {
+        if (confirm('Tem certeza que deseja remover esta conta?')) {
+            await fetch(`/contas_pagar/${id}`, {method: 'DELETE'});
+            carregarContas();
+        }
+    }
+
+    carregarContas();
+    </script>
+</body>
+</html>

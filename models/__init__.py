@@ -4,4 +4,5 @@ db = SQLAlchemy()
 
 from .models_adega import *
 from .fornecedor import *
-from .lote import * 
+from .lote import *
+from .conta_pagar import *

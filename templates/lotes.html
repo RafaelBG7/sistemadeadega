@@ -17,8 +17,9 @@
         <a href="/index" class="tab-btn"><i class="fa-solid fa-chart-line"></i> Vendas</a>
         <a href="/index" class="tab-btn"><i class="fa-solid fa-vault"></i> Caixa</a>
         <a href="/index" class="tab-btn"><i class="fa-solid fa-file-lines"></i> Relatórios</a>
-        <a href="/fornecedores" class="tab-btn"><i class="fa-solid fa-truck"></i> Fornecedores</a>
-        <a href="/lotes" class="tab-btn active"><i class="fa-solid fa-boxes-stacked"></i> Lotes</a>
+        <a href="/fornecedores" class="tab-btn active"><i class="fa-solid fa-truck"></i> Fornecedores</a>
+        <a href="/lotes" class="tab-btn"><i class="fa-solid fa-boxes-stacked"></i> Lotes</a>
+        <a href="/contas_pagar/pagina" class="tab-btn"><i class="fa-solid fa-money-bill-wave"></i> Contas a Pagar</a>
     </div>
     <div class="container">
         <h2>Cadastrar Lote</h2>
@@ -38,7 +39,7 @@
         <ul id="lista-lotes"></ul>
     </div>
     <script>
-    async function carregarLotes() {
+    async function carregarLotes() {            
         const resp = await fetch('/lotes/');
         const lotes = await resp.json();
         const lista = document.getElementById('lista-lotes');
