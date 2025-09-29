@@ -6,3 +6,4 @@ from .models_adega import *
 from .fornecedor import *
 from .lote import *
 from .conta_pagar import *
+from .promocao import *

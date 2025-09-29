@@ -13,6 +13,7 @@ from routes.clientes import clientes_bp
 from routes.fornecedores import fornecedores_bp
 from routes.lotes import lotes_bp
 from routes.contas_pagar import contas_pagar_bp
+from routes.promocoes import promocoes_bp
 
 def create_app():
     app = Flask(__name__, static_folder='static', template_folder='templates')
@@ -40,6 +41,7 @@ def create_app():
     app.register_blueprint(fornecedores_bp, url_prefix='/fornecedores')
     app.register_blueprint(lotes_bp, url_prefix='/lotes')
     app.register_blueprint(contas_pagar_bp, url_prefix='/contas_pagar')
+    app.register_blueprint(promocoes_bp, url_prefix='/promocoes')
 
     @app.route('/index')
     def index():

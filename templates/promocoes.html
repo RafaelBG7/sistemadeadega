@@ -2,12 +2,12 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <title>Lotes e Validade</title>
+    <title>Promoções</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-    <h1><i class="fa-solid fa-boxes-stacked"></i> Controle de Lotes e Validade</h1>
+    <h1><i class="fa-solid fa-tags"></i> Promoções</h1>
     <div class="tabs">
         <a href="/index" class="tab-btn"><i class="fa-solid fa-layer-group"></i> Categoria</a>
         <a href="/index" class="tab-btn"><i class="fa-solid fa-box"></i> Produto</a>
@@ -23,91 +23,95 @@
         <a href="/promocoes/pagina" class="tab-btn active"><i class="fa-solid fa-tags"></i> Promoções</a>
     </div>
     <div class="container">
-        <h2>Cadastrar Lote</h2>
-        <form id="form-lote">
+        <h2>Cadastrar Promoção</h2>
+        <form id="form-promocao">
             <select name="produto_id" required>
                 <option value="">Selecione o produto</option>
                 {% for produto in produtos %}
                 <option value="{{ produto.id }}">{{ produto.produto }}</option>
                 {% endfor %}
             </select>
-            <input type="text" name="numero_lote" placeholder="Número do Lote" required>
-            <input type="date" name="validade" required>
-            <input type="number" name="quantidade" placeholder="Quantidade" min="1" required>
-            <button type="submit">Adicionar Lote</button>
+            <input type="number" name="preco_promocional" placeholder="Preço Promocional" step="0.01" required>
+            <input type="date" name="data_inicio" required>
+            <input type="date" name="data_fim" required>
+            <button type="submit">Adicionar Promoção</button>
         </form>
-        <h2>Lotes Cadastrados</h2>
-        <ul id="lista-lotes"></ul>
+        <h2>Promoções Ativas</h2>
+        <ul id="lista-promocoes"></ul>
     </div>
     <script>
-    async function carregarLotes() {            
-        const resp = await fetch('/lotes/');
-        const lotes = await resp.json();
-        const lista = document.getElementById('lista-lotes');
+    async function carregarPromocoes() {
+        const resp = await fetch('/promocoes/');
+        const promocoes = await resp.json();
+        const lista = document.getElementById('lista-promocoes');
         lista.innerHTML = '';
-        lotes.forEach(lote => {
+        promocoes.forEach(promo => {
             const hoje = new Date();
-            const validade = new Date(lote.validade);
-            let alerta = '';
-            const diasRestantes = Math.ceil((validade - hoje) / (1000*60*60*24));
-            if (validade < hoje) {
-                alerta = '<span style="color:red;">(Vencido)</span>';
-            } else if (diasRestantes <= 5) {
-                alerta = '<span style="color:orange;">(Vence em ' + diasRestantes + ' dias)</span>';
+            const inicio = new Date(promo.data_inicio);
+            const fim = new Date(promo.data_fim);
+            let status = '';
+            if (hoje >= inicio && hoje <= fim) {
+                status = '<span style="color:green;">(Ativa)</span>';
+            } else if (hoje < inicio) {
+                status = '<span style="color:orange;">(Futura)</span>';
+            } else {
+                status = '<span style="color:red;">(Expirada)</span>';
             }
             lista.innerHTML += `
                 <li>
-                    <b>${lote.produto}</b> | Lote: ${lote.numero_lote} | Validade: ${lote.validade} ${alerta} | Qtde: ${lote.quantidade}
-                    <button onclick="editarLote(${lote.id}, '${lote.produto_id}', '${lote.numero_lote}', '${lote.validade}', ${lote.quantidade})"><i class="fa fa-edit"></i></button>
-                    <button onclick="removerLote(${lote.id})"><i class="fa fa-trash"></i></button>
+                    <b>${promo.produto}</b> | Preço Promocional: R$ ${promo.preco_promocional.toFixed(2)} | 
+                    Início: ${promo.data_inicio} | Fim: ${promo.data_fim} ${status}
+                    <button onclick="editarPromocao(${promo.id}, '${promo.produto_id}', ${promo.preco_promocional}, '${promo.data_inicio}', '${promo.data_fim}')"><i class="fa fa-edit"></i></button>
+                    <button onclick="removerPromocao(${promo.id})"><i class="fa fa-trash"></i></button>
                 </li>
             `;
         });
     }
 
-    document.getElementById('form-lote').onsubmit = async function(e) {
+    document.getElementById('form-promocao').onsubmit = async function(e) {
         e.preventDefault();
         const form = e.target;
         const data = Object.fromEntries(new FormData(form));
+        data.preco_promocional = parseFloat(data.preco_promocional);
         if (form.dataset.editando) {
             const id = form.dataset.editando;
-            await fetch(`/lotes/${id}`, {
+            await fetch(`/promocoes/${id}`, {
                 method: 'PUT',
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify(data)
             });
             delete form.dataset.editando;
-            form.querySelector('button[type="submit"]').textContent = 'Adicionar Lote';
+            form.querySelector('button[type="submit"]').textContent = 'Adicionar Promoção';
         } else {
-            await fetch('/lotes/', {
+            await fetch('/promocoes/', {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify(data)
             });
         }
         form.reset();
-        carregarLotes();
+        carregarPromocoes();
     };
 
-    window.editarLote = function(id, produto_id, numero_lote, validade, quantidade) {
-        const form = document.getElementById('form-lote');
+    window.editarPromocao = function(id, produto_id, preco_promocional, data_inicio, data_fim) {
+        const form = document.getElementById('form-promocao');
         form.produto_id.value = produto_id;
-        form.numero_lote.value = numero_lote;
-        form.validade.value = validade;
-        form.quantidade.value = quantidade;
+        form.preco_promocional.value = preco_promocional;
+        form.data_inicio.value = data_inicio;
+        form.data_fim.value = data_fim;
         form.dataset.editando = id;
         form.querySelector('button[type="submit"]').textContent = 'Salvar Alterações';
         form.scrollIntoView({behavior: 'smooth'});
     }
 
-    window.removerLote = async function(id) {
-        if (confirm('Tem certeza que deseja remover este lote?')) {
-            await fetch(`/lotes/${id}`, {method: 'DELETE'});
-            carregarLotes();
+    window.removerPromocao = async function(id) {
+        if (confirm('Tem certeza que deseja remover esta promoção?')) {
+            await fetch(`/promocoes/${id}`, {method: 'DELETE'});
+            carregarPromocoes();
         }
     }
 
-    carregarLotes();
+    carregarPromocoes();
     </script>
 </body>
 </html>
