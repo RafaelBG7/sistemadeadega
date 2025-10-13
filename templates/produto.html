@@ -1,0 +1,33 @@
+{% extends 'index.html' %}
+{% block title %}Produtos{% endblock %}
+
+{% block content %}
+
+<div class="tabs">
+    <a href="{{ url_for('categoria') }}" class="tab-btn"><i class="fa-solid fa-layer-group"></i> Categoria</a>
+    <a href="{{ url_for('produto') }}" class="tab-btn"><i class="fa-solid fa-box"></i> Produto</a>
+    <a href="{{ url_for('cliente') }}" class="tab-btn"><i class="fa-solid fa-user"></i> Cliente</a>
+    <a href="{{ url_for('vendedor') }}" class="tab-btn"><i class="fa-solid fa-user-tie"></i> Vendedor</a>
+    <a href="{{ url_for('vendedores.ranking') }}?format=html" class="tab-btn"><i class="fa-solid fa-crown"></i> Ranking</a>
+    <a href="{{ url_for('realizar_venda') }}" class="tab-btn"><i class="fa-solid fa-cart-shopping"></i> Realizar Venda</a>
+    <a href="{{ url_for('vendas') }}" class="tab-btn"><i class="fa-solid fa-chart-line"></i> Vendas</a>
+    <a href="{{ url_for('caixa') }}" class="tab-btn"><i class="fa-solid fa-vault"></i> Caixa</a>
+    <a href="{{ url_for('relatorios') }}" class="tab-btn"><i class="fa-solid fa-file-lines"></i> Relatórios</a>
+</div>
+
+<div class="form-container">
+    <h2><i class="fa-solid fa-box"></i> Adicionar Produto</h2>
+    <form id="product-form">
+        <input type="text" id="product-name" placeholder="Nome do Produto" required>
+        <input type="text" id="product-category" placeholder="Nome da Categoria" required>
+        <input type="hidden" id="product-category-id">
+        <input type="text" id="purchase-price" placeholder="Valor de Compra" required>
+        <input type="text" id="selling-price" placeholder="Valor de Venda" required>
+        <input type="number" id="product-quantity" placeholder="Quantidade" required>
+        <button type="submit"><i class="fa-solid fa-plus"></i> Adicionar</button>
+    </form>
+
+    <h2><i class="fa-solid fa-list"></i> Produtos</h2>
+    <ul id="product-list"></ul>
+</div>
+{% endblock %}

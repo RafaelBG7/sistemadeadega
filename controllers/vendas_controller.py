@@ -2,6 +2,7 @@ from models.models_adega import Produto, Venda, Vendedor, Caixa, Cliente
 from datetime import datetime, date
 from models import db
 from sqlalchemy.exc import NoResultFound
+from sqlalchemy import func, and_
 
 def realizar_venda(data):
     print("Dados recebidos para venda:", data)  # Log para depuração
@@ -291,4 +292,56 @@ def relatorio_por_cliente(cliente_id):
             'vendas': relatorio
         }
     except Exception as e:
+        return {'error': str(e)}
+
+
+def ranking_vendedores_por_mes(year=None, month=None):
+    """Retorna ranking de vendedores por quantidade vendida no mês especificado.
+    Se year ou month não forem fornecidos, usa o mês atual.
+    Retorna dict com 'ranking' (lista de vendedores ordenada) e 'vendedor_do_mes' (o topo, ou None).
+    """
+    try:
+        hoje = datetime.utcnow()
+        if year is None or month is None:
+            year = hoje.year
+            month = hoje.month
+
+        inicio = datetime(year, month, 1)
+        # calcular fim do mês: próximo mês menos 1 segundo
+        if month == 12:
+            fim = datetime(year + 1, 1, 1)
+        else:
+            fim = datetime(year, month + 1, 1)
+
+        # Usar outer join para incluir vendedores sem vendas (quantidade 0)
+        query = db.session.query(
+            Vendedor.id.label('vendedor_id'),
+            Vendedor.nome.label('vendedor_nome'),
+            func.coalesce(func.sum(Venda.quantidade), 0).label('quantidade_total'),
+            func.coalesce(func.sum(Venda.total_venda), 0.0).label('valor_total')
+        ).outerjoin(Venda, and_(Venda.vendedor_id == Vendedor.id, Venda.data >= inicio, Venda.data < fim))
+
+        query = query.group_by(Vendedor.id).order_by(func.coalesce(func.sum(Venda.quantidade), 0).desc())
+
+        results = query.all()
+
+        ranking = []
+        for row in results:
+            ranking.append({
+                'vendedor_id': row.vendedor_id,
+                'vendedor_nome': row.vendedor_nome,
+                'quantidade_total': int(row.quantidade_total),
+                'valor_total': float(row.valor_total)
+            })
+
+        vendedor_do_mes = ranking[0] if ranking and ranking[0]['quantidade_total'] > 0 else None
+
+        return {
+            'year': year,
+            'month': month,
+            'ranking': ranking,
+            'vendedor_do_mes': vendedor_do_mes
+        }
+    except Exception as e:
+        print(f"Erro ao calcular ranking de vendedores: {e}")
         return {'error': str(e)}

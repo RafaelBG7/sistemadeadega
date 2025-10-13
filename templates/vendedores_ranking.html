@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ranking de Vendedores - Sistema de Adega</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+  <div id="toast"></div>
+  <h1><i class="fa-solid fa-wine-bottle"></i> Sistema de Adega</h1>
+
+  <div class="tabs">
+    <a href="/index" class="tab-btn"><i class="fa-solid fa-layer-group"></i> Categoria</a>
+    <a href="/index" class="tab-btn"><i class="fa-solid fa-box"></i> Produto</a>
+    <a href="/index" class="tab-btn"><i class="fa-solid fa-user"></i> Cliente</a>
+    <a href="/index" class="tab-btn"><i class="fa-solid fa-user-tie"></i> Vendedor</a>
+    <a href="/vendedores/ranking?format=html" class="tab-btn active"><i class="fa-solid fa-crown"></i> Ranking</a>
+    <a href="/index" class="tab-btn"><i class="fa-solid fa-cart-shopping"></i> Realizar Venda</a>
+    <a href="/index" class="tab-btn"><i class="fa-solid fa-chart-line"></i> Vendas</a>
+    <a href="/index" class="tab-btn"><i class="fa-solid fa-vault"></i> Caixa</a>
+    <a href="/index" class="tab-btn"><i class="fa-solid fa-file-lines"></i> Relatórios</a>
+    <a href="/fornecedores" class="tab-btn"><i class="fa-solid fa-truck"></i> Fornecedores</a>
+    <a href="/lotes" class="tab-btn"><i class="fa-solid fa-boxes-stacked"></i> Lotes</a>
+    <a href="/contas_pagar/pagina" class="tab-btn"><i class="fa-solid fa-money-bill-wave"></i> Contas a Pagar</a>
+    <a href="/promocoes/pagina" class="tab-btn"><i class="fa-solid fa-tags"></i> Promoções</a>
+  </div>
+
+  <div class="container">
+    <div class="form-container">
+      <h2><i class="fa-solid fa-crown"></i> Ranking de Vendedores</h2>
+
+      <form id="ranking-filter" method="get" action="{{ url_for('vendedores.ranking') }}">
+        <label for="month">Mês:</label>
+        <select id="month" name="month">
+          {% for m in range(1,13) %}
+            <option value="{{m}}" {% if data.month == m %}selected{% endif %}>{{"%02d"|format(m)}}</option>
+          {% endfor %}
+        </select>
+
+        <label for="year">Ano:</label>
+        <select id="year" name="year">
+          {% set current_year = data.year %}
+          {% for y in range(current_year-3, current_year+1) %}
+            <option value="{{y}}" {% if data.year == y %}selected{% endif %}>{{y}}</option>
+          {% endfor %}
+        </select>
+
+        <input type="hidden" name="format" value="html">
+        <button type="submit"><i class="fa-solid fa-filter"></i> Filtrar</button>
+      </form>
+
+      {% if data.vendedor_do_mes %}
+        <div class="highlight">
+          <h3>Vendedor do Mês: <strong>{{ data.vendedor_do_mes.vendedor_nome }}</strong></h3>
+          <p>Quantidade vendida: <strong>{{ data.vendedor_do_mes.quantidade_total }}</strong></p>
+          <p>Valor total: R$ <strong>{{ "%.2f"|format(data.vendedor_do_mes.valor_total) }}</strong></p>
+        </div>
+      {% else %}
+        <div class="highlight empty">
+          <h3>Nenhum vendedor com vendas neste período.</h3>
+        </div>
+      {% endif %}
+
+      <div class="table-wrap">
+        <table class="styled-table">
+          <thead>
+            <tr>
+              <th>Posição</th>
+              <th>Vendedor</th>
+              <th>Quantidade Vendida</th>
+              <th>Valor Total (R$)</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for v in data.ranking %}
+              <tr class="{% if data.vendedor_do_mes and v.vendedor_id == data.vendedor_do_mes.vendedor_id %}winner{% endif %}">
+                <td>{{ loop.index }}</td>
+                <td>{{ v.vendedor_nome }}</td>
+                <td>{{ v.quantidade_total }}</td>
+                <td>R$ {{ "%.2f"|format(v.valor_total) }}</td>
+              </tr>
+            {% else %}
+              <tr>
+                <td colspan="4">Nenhum dado disponível.</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+
+      <p style="margin-top:16px;"><a href="/">&larr; Voltar ao Início</a></p>
+    </div>
+  </div>
+
+  <script src="{{ url_for('static', filename='script.js') }}"></script>
+  <script src="{{ url_for('static', filename='tabs.js') }}"></script>
+</body>
+</html>

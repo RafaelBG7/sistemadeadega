@@ -5,6 +5,8 @@ from controllers.vendedores_controller import (
     atualizar_vendedor,
     deletar_vendedor
 )
+from controllers.vendas_controller import ranking_vendedores_por_mes
+from flask import render_template, request
 
 vendedores_bp = Blueprint('vendedores', __name__)
 
@@ -35,3 +37,18 @@ def atualizar(vendedor_id):
 def deletar(vendedor_id):
     result, status_code = deletar_vendedor(vendedor_id)
     return jsonify(result), status_code
+
+
+@vendedores_bp.route('/ranking', methods=['GET'])
+def ranking():
+    # aceita ?year=YYYY&month=M&format=html
+    year = request.args.get('year', type=int)
+    month = request.args.get('month', type=int)
+    fmt = request.args.get('format', default='json')
+
+    result = ranking_vendedores_por_mes(year=year, month=month)
+    if fmt == 'html':
+        # renderiza template
+        return render_template('vendedores_ranking.html', data=result)
+
+    return jsonify(result)
