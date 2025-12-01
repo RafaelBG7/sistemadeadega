@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify
-from controllers.produtos_controller import cadastrar_produto, listar_produtos
+from controllers.produtos_controller import cadastrar_produto, listar_produtos, estoque_total, valor_total_estoque
 from models.models_adega import Produto, Categoria, db
 
 produtos_bp = Blueprint('produtos', __name__)
@@ -46,6 +46,24 @@ def estoque_baixo():
         for p in produtos
     ]
     return jsonify(produtos_list), 200
+
+
+@produtos_bp.route('/estoque-total', methods=['GET'])
+def rota_estoque_total():
+    """Rota simples que retorna o total de unidades em estoque e quantos produtos estão abaixo do limite."""
+    limite = request.args.get('limite', 10, type=int)
+    result = estoque_total(limite=limite)
+    return jsonify(result), 200
+
+
+@produtos_bp.route('/valor-estoque', methods=['GET'])
+def rota_valor_estoque():
+    """Retorna valores agregados do estoque: valor pelo custo, valor pela venda e contagens."""
+    try:
+        result = valor_total_estoque()
+        return jsonify(result), 200
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
 @produtos_bp.route('/editar/<int:produto_id>', methods=['PUT'])
 def editar_produto(produto_id):

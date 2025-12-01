@@ -43,6 +43,14 @@ system-project
 - The application provides endpoints for managing categories, brands, products, purchase prices, and selling prices.
 - Each entity has its own model, controller, and routes to handle CRUD operations.
 
+## New: Exportar Relatório de Vendas (CSV)
+Você pode exportar o relatório de vendas por período em formato CSV com a nova rota:
+
+- Endpoint: `GET /relatorios/periodo/export?inicio=YYYY-MM-DD&fim=YYYY-MM-DD`
+- Exemplo: `GET /relatorios/periodo/export?inicio=2025-01-01&fim=2025-01-31`
+
+O endpoint retorna um arquivo CSV com colunas: `id, produto, vendedor, quantidade, data, total_venda, lucro, forma_pagamento`.
+
 ## Contributing
 Contributions are welcome! Please submit a pull request or open an issue for any enhancements or bug fixes.
 

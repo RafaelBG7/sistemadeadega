@@ -6,6 +6,7 @@
     <title>Sistema de Adega</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
     <div id="toast"></div>
@@ -20,6 +21,7 @@
         <a href="#" class="tab-btn" data-tab="tab-vendas"><i class="fa-solid fa-chart-line"></i> Vendas</a>
         <a href="#" class="tab-btn" data-tab="tab-caixa"><i class="fa-solid fa-vault"></i> Caixa</a>
         <a href="#" class="tab-btn" data-tab="tab-relatorios"><i class="fa-solid fa-file-lines"></i> Relatórios</a>
+        <a href="#" class="tab-btn" data-tab="tab-dashboard"><i class="fa-solid fa-tachometer-alt"></i> Gestor</a>
         <a href="/fornecedores" class="tab-btn"><i class="fa-solid fa-truck"></i> Fornecedores</a>
         <a href="/lotes" class="tab-btn"><i class="fa-solid fa-boxes-stacked"></i> Lotes</a>
         <a href="/contas_pagar/pagina" class="tab-btn"><i class="fa-solid fa-money-bill-wave"></i> Contas a Pagar</a>
@@ -222,6 +224,10 @@
                     <label for="low-stock-limit">Limite de Estoque:</label>
                     <input type="number" id="low-stock-limit" placeholder="Digite o limite de estoque" />
                     <button id="low-stock-button"><i class="fa-solid fa-file-lines"></i> Gerar Relatório</button>
+                    <button id="stock-summary-button"><i class="fa-solid fa-boxes-stacked"></i> Mostrar Resumo de Estoque</button>
+                    <button id="valor-estoque-button"><i class="fa-solid fa-coins"></i> Mostrar Valor do Estoque</button>
+                    <div id="estoque-resumo" style="margin-top:10px;"></div>
+                    <div id="valor-estoque" style="margin-top:10px;"></div>
                     <ul id="low-stock-list"></ul>
                 </div>
                 <!-- Relatório por Cliente -->
@@ -234,6 +240,28 @@
                     <button id="gerar-relatorio-cliente"><i class="fa-solid fa-file-lines"></i> Gerar Relatório</button>
                     <div id="resultado-cliente"></div>
                 </div>
+            </div>
+        </div>
+
+        <!-- Dashboard (nova aba) -->
+        <div class="tab-content" id="tab-dashboard">
+            <div class="form-container"> 
+                <h2><i class="fa-solid fa-tachometer-alt"></i> Dados</h2>
+                <div id="dashboard-kpis" style="display:flex;gap:16px;flex-wrap:wrap;">
+                    <div class="kpi-card" id="kpi-vendas-diarias" style="padding:10px;border:1px solid #ddd;border-radius:6px;min-width:180px;">
+                        <h4>Vendas Hoje</h4>
+                        <p>R$ <span id="kpi-vendas-diarias-valor">0.00</span></p>
+                    </div>
+                    <div class="kpi-card" id="kpi-valor-estoque" style="padding:10px;border:1px solid #ddd;border-radius:6px;min-width:180px;">
+                        <h4>Valor do Estoque (Custo)</h4>
+                        <p>R$ <span id="kpi-valor-estoque-valor">0.00</span></p>
+                    </div>
+                    <div class="kpi-card" id="kpi-estoque-baixo" style="padding:10px;border:1px solid #ddd;border-radius:6px;min-width:180px;">
+                        <h4>Produtos abaixo do limite</h4>
+                        <p><span id="kpi-estoque-baixo-valor">0</span></p>
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>

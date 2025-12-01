@@ -557,6 +557,67 @@ document.addEventListener('DOMContentLoaded', function () {
     // Adicionar evento ao botão de estoque baixo
     document.getElementById('low-stock-button').addEventListener('click', listarEstoqueBaixo);
 
+    // Função para obter e exibir o resumo de estoque (total e produtos abaixo do limite)
+    function atualizarResumoEstoque() {
+        const limiteInput = document.getElementById('low-stock-limit');
+        const limite = parseInt(limiteInput.value, 10) || 10;
+
+        fetch(`/produtos/estoque-total?limite=${limite}`)
+            .then(response => {
+                if (!response.ok) throw new Error('Erro ao buscar resumo de estoque');
+                return response.json();
+            })
+            .then(data => {
+                const resumo = document.getElementById('estoque-resumo');
+                resumo.innerHTML = `
+                    <p><strong>Total em estoque:</strong> ${data.total_estoque}</p>
+                    <p><strong>Produtos abaixo do limite (${data.limite}):</strong> ${data.produtos_abaixo_limite}</p>
+                `;
+            })
+            .catch(error => console.error('Erro ao atualizar resumo de estoque:', error));
+    }
+
+    // Evento do botão de resumo de estoque
+    const stockSummaryBtn = document.getElementById('stock-summary-button');
+    if (stockSummaryBtn) stockSummaryBtn.addEventListener('click', atualizarResumoEstoque);
+
+    // Atualizar automaticamente o resumo ao gerar relatório de estoque baixo
+    document.getElementById('low-stock-button').addEventListener('click', function(){
+        listarEstoqueBaixo();
+        setTimeout(atualizarResumoEstoque, 300); // pequeno delay para consistência visual
+    });
+
+    // Inicializar resumo ao carregar a página
+    setTimeout(atualizarResumoEstoque, 500);
+
+    // Função para obter e exibir o valor total do estoque
+    function atualizarValorEstoque() {
+        fetch('/produtos/valor-estoque')
+            .then(response => {
+                if (!response.ok) throw new Error('Erro ao buscar valor do estoque');
+                return response.json();
+            })
+            .then(data => {
+                const container = document.getElementById('valor-estoque');
+                if (!container) return;
+                const margem = data.margem_media !== null ? (data.margem_media * 100).toFixed(2) + '%' : 'N/A';
+                container.innerHTML = `
+                    <p><strong>Produtos distintos:</strong> ${data.produtos_count}</p>
+                    <p><strong>Total de unidades:</strong> ${data.total_unidades}</p>
+                    <p><strong>Valor (custo):</strong> R$ ${data.valor_custo.toFixed(2)}</p>
+                    <p><strong>Valor (venda):</strong> R$ ${data.valor_venda.toFixed(2)}</p>
+                    <p><strong>Margem média:</strong> ${margem}</p>
+                `;
+            })
+            .catch(error => console.error('Erro ao atualizar valor do estoque:', error));
+    }
+
+    const valorEstoqueBtn = document.getElementById('valor-estoque-button');
+    if (valorEstoqueBtn) valorEstoqueBtn.addEventListener('click', atualizarValorEstoque);
+
+    // Atualiza automaticamente o valor do estoque ao carregar
+    setTimeout(atualizarValorEstoque, 800);
+
     // Cadastrar Cliente
     document.getElementById('client-form').addEventListener('submit', function (event) {
         event.preventDefault();
@@ -706,6 +767,93 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Também chame após preencher os clientes
     setTimeout(atualizarStatusFidelidade, 500); // Pequeno delay para garantir que o select foi preenchido
+
+    // --- Dashboard: carregar KPIs e gráfico ---
+    let topProdutosChart = null;
+
+    function renderTopProdutosChart(labels, values) {
+        const ctx = document.getElementById('chart-top-produtos');
+        if (!ctx) return;
+
+        const data = {
+            labels: labels,
+            datasets: [{
+                label: 'Quantidade Vendida',
+                data: values,
+                backgroundColor: 'rgba(54, 162, 235, 0.6)'
+            }]
+        };
+
+        if (topProdutosChart) {
+            topProdutosChart.data = data;
+            topProdutosChart.update();
+            return;
+        }
+
+        topProdutosChart = new Chart(ctx.getContext('2d'), {
+            type: 'bar',
+            data: data,
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: { beginAtZero: true }
+                }
+            }
+        });
+    }
+
+    async function loadDashboard() {
+        try {
+            // Buscar vendas diárias, valor do estoque, resumo de estoque e relatório por produto
+            const [vendasResp, valorResp, resumoResp, produtosResp] = await Promise.all([
+                fetch('/vendas/diarias'),
+                fetch('/produtos/valor-estoque'),
+                fetch('/produtos/estoque-total'),
+                fetch('/relatorios/produto')
+            ]);
+
+            const vendas = await vendasResp.json();
+            const valor = await valorResp.json();
+            const resumo = await resumoResp.json();
+            const produtos = await produtosResp.json();
+
+            // Atualizar KPIs
+            const vendasValorEl = document.getElementById('kpi-vendas-diarias-valor');
+            const valorEstoqueEl = document.getElementById('kpi-valor-estoque-valor');
+            const estoqueBaixoEl = document.getElementById('kpi-estoque-baixo-valor');
+            const produtosCountEl = document.getElementById('kpi-produtos-count-valor');
+
+            if (vendasValorEl && vendas.total_vendas !== undefined) vendasValorEl.textContent = vendas.total_vendas.toFixed(2);
+            if (valorEstoqueEl && valor.valor_custo !== undefined) valorEstoqueEl.textContent = valor.valor_custo.toFixed(2);
+            if (estoqueBaixoEl && resumo.produtos_abaixo_limite !== undefined) estoqueBaixoEl.textContent = resumo.produtos_abaixo_limite;
+            if (produtosCountEl && valor.produtos_count !== undefined) produtosCountEl.textContent = valor.produtos_count;
+
+            // Preparar top produtos (usar relatorio_por_produto retornado em produtos)
+            // produtos is expected to be a list of {produto, total_vendas, lucro_total}
+            const sorted = produtos.sort((a,b) => (b.total_vendas || 0) - (a.total_vendas || 0));
+            const top = sorted.slice(0, 8);
+            const labels = top.map(p => p.produto);
+            const values = top.map(p => Number(p.total_vendas || 0));
+
+            renderTopProdutosChart(labels, values);
+        } catch (err) {
+            console.error('Erro ao carregar dashboard:', err);
+        }
+    }
+
+    // Ativar recarregamento quando aba Dashboard for clicada
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.addEventListener('click', function (e) {
+            const tab = btn.getAttribute('data-tab');
+            if (tab === 'tab-dashboard') {
+                setTimeout(loadDashboard, 150); // pequeno delay to allow tab show
+            }
+        });
+    });
+
+    // Carregar inicialmente caso queira pré-popular
+    setTimeout(loadDashboard, 1000);
 
     function showToast(msg) {
         const toast = document.getElementById('toast');
